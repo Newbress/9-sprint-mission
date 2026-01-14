@@ -1,18 +1,22 @@
 package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.entity.Channel;
+import java.util.List;
+import java.util.UUID;
 
 
 public interface ChannelService {
-    //생성
+    // 생성
     Channel addCh(Channel ch);
 
-    //조회
-    Channel getCh(String Chname);
+    // 조회
+    Channel getCh(UUID id);
 
-    //수정
-    Channel editCh(String newChname, String Title, String newContent);
+    // 전체조회
+    List<Channel> getall();
+    // 수정
+    Channel editCh(UUID id, String newChatroom);
 
-    //삭제
-    boolean delCh(String Chname, String Title, String Content);
+    // 삭제
+    boolean delCh(UUID id);
 }

@@ -1,48 +1,49 @@
 package com.sprint.mission.discodeit.entity;
 
-import com.sprint.mission.discodeit.service.ChannelService;
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
-public class Channel extends BasicEntity {
-    private String Chname;
-    private User Author ;
-    private String Title;
-    private String Content;
+public class Channel {
+    private final UUID id;
+    private final long createdAt;
+    private long updatedAt;
+    private String Chatroom; //chat room
 
-    public Channel(String chname, String title, User author, String content) {
-        super();
-        this.Chname = chname;
-        this.Author = author;
-        this.Title = title;
-        this.Content = content;
+    public Channel(String chatroom) {
+        this.id = UUID.randomUUID();
+        long now = System.currentTimeMillis();
+        this.createdAt = now;
+        this.updatedAt = now;
+        this.Chatroom = chatroom;
     }
 
-    public String getChannel() {
-        return Chname;
+    public UUID getId() {
+        return id;
     }
 
-    public User getAuthor() {
-
-        return Author;
+    public String getCreatedAt() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date(this.createdAt));
     }
 
-    public String getTitle() {
-
-        return Title;
+    public String getUpdatedAt() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date(this.updatedAt));
     }
 
-    public String getContent() {
-
-        return Content;
+    public String getChatroom() {
+        return Chatroom;
     }
 
-    public void update(String newChname, User newAuthor, String newTitle, String newContent) {
-        this.Chname = newChname;
-        this.Author = newAuthor;
-        this.Title = newTitle;
-        this.Content = newContent;
+    public void update(String newChatroom) {
+        this.Chatroom = newChatroom;
 
     }
 
+    @Override
+    public String toString() {
+        return "채널 이름='" + Chatroom + "\n" +
+                "채널 ID: "+ id + "\n";
+    }
 }

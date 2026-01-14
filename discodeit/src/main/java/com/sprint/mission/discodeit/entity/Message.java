@@ -1,39 +1,63 @@
 package com.sprint.mission.discodeit.entity;
 
-
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
-public class Message extends BasicEntity {
-    private UUID id;
-    private long createdAt;
+public class Message {
+    private final UUID id;
+    private final long createdAt;
     private long updatedAt;
+    private final UUID authorid;
+    private final UUID chatRoomid;
+    private String content;
 
-    private User Author;
-    private Channel Channel;
-    private String Content;
 
-    public Message( Channel channel, User author, String content) {
-        super(); //공통 필드 초기화
-        this.Channel = channel;
-        this.Author = author;
-        this.Content = content;
+    public Message( UUID chatroomid, UUID authorid, String content) {
+        this.id = UUID.randomUUID();
+        long now = System.currentTimeMillis();
+        this.createdAt = now;
+        this.updatedAt = now;
+        this.chatRoomid = chatroomid;
+        this.authorid = authorid;
+        this.content = content;
     }
 
-    public User getAuthor() {
-        return Author;
+    public UUID getId() {
+        return id;
     }
 
-    public Channel getChannel() {
-        return Channel;
+    public String getCreatedAt() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date(this.createdAt));
+    }
+
+    public String getUpdatedAt() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return sdf.format(new Date(this.updatedAt));
+    }
+
+    public UUID getAuthorid() {
+        return authorid;
+    }
+
+    public UUID getChatRoomid() {
+        return chatRoomid;
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
-    public void update(User newAuthor, Channel newChannel, String newContent, String newEmoji) {
-        this.Author = newAuthor;
-        this.Channel = newChannel;
-        this.Content = newContent;
+    public void update( String newContent) {
+        this.content = newContent;
+    }
+
+    @Override
+    public String toString() {
+        return "채널 ID: " + chatRoomid + "\n" +
+                "작성자 ID: " + authorid + "\n" +
+                "메세지 내용: " + content + "\n" +
+                "메세지 ID: " + id + "\n";
     }
 }
