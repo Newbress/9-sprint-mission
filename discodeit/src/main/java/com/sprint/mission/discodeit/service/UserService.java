@@ -6,10 +6,14 @@ import java.util.UUID;
 
 public interface UserService {
     // 생성
-    User addUser(User user);
+    User addUser(String inputUsername, String inputEmail, String inputPhone);
 
     // 조회
-    User getUser(UUID id);
+    User getUserName(String userName);
+
+    User getUserEmail(String email);
+
+    User getUserPhone(String phone);
 
     // 전체 조회
     List<User> getall();

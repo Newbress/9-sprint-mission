@@ -6,20 +6,20 @@ import java.util.UUID;
 
 public class User{
     private final UUID id;
-    private final long createdAt;
-    private long updatedAt;
-    private String Username;
-    private String Email;
-    private String Phone;
+    private final Long createdAt;
+    private Long updatedAt;
+    private String userName;
+    private String email;
+    private String phone;
 
     public User(String username, String email, String phone) {
         this.id = UUID.randomUUID();
         long now = System.currentTimeMillis();
         this.createdAt = now;
         this.updatedAt = now;
-        this.Username = username;
-        this.Email = email;
-        this.Phone = phone;
+        this.userName = username;
+        this.email = email;
+        this.phone = phone;
     }
 
     public UUID getId() {
@@ -37,28 +37,28 @@ public class User{
     }
 
     public String getUsername() {
-        return Username;
+        return userName;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public String getPhone() {
-        return Phone;
+        return phone;
     }
 
     public void update(String newUsername, String newEmail, String newPhone) {
-        this.Username = newUsername;
-        this.Email = newEmail;
-        this.Phone = newPhone;
+        this.userName = newUsername;
+        this.email = newEmail;
+        this.phone = newPhone;
     }
 
     @Override
     public String toString() {
-        return "유저: " + Username + "\n" +
-                "이메일: " + Email + "\n" +
-                "전화번호: " + Phone  + "\n" +
+        return "유저: " + userName + "\n" +
+                "이메일: " + email + "\n" +
+                "전화번호: " + phone  + "\n" +
                 "UserID: " + id;
     }
 

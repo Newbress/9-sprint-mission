@@ -144,7 +144,7 @@ public class JavaApplication {
                 sc.nextLine();
                 switch (UserMenu) {
 
-                    case 1:
+                    case 1:{
                         // 생성
                         System.out.println("유저 이름 넣기");
                         String inputUsername = sc.nextLine();
@@ -152,29 +152,36 @@ public class JavaApplication {
                         String inputEmail = sc.nextLine();
                         System.out.println("전화번호 입력하기");
                         String inputPhone = sc.nextLine();
-                        User newusers = new User(inputUsername, inputEmail, inputPhone);
-                        userService.addUser(newusers);
+
+                        User newusers = userService.addUser(inputUsername, inputEmail, inputPhone);
                         System.out.println(newusers);
                         System.out.println("생성 시간" + newusers.getCreatedAt());
                         break;
+                    }
 
-                    case 2:
-                        // 조회
-                        System.out.println("유저 ID 입력하기");
-                        String inputID = sc.nextLine();
-                        try {
-                            java.util.UUID uuid = java.util.UUID.fromString(inputID);
-                            User findUser = userService.getUser(uuid);
-                            if(findUser != null){
-                                System.out.println("단건 조회: "+ findUser);
-                            } else {
-                                System.out.println("조회 실패: 유저 ID를 다시 확인 바랍니다. ");
+                    case 2:{
+                        // 이메일/전화번호를 입력해 조회하게 하기
+                        System.out.println("1. 이메일로 유저 조회하기");
+                        System.out.println("2. 전화번호로 유저 조회하기");
+                        int inputFind = sc.nextInt();
+                        sc.nextLine();
+                        try{
+                            if(inputFind == 1) {
+                                System.out.println("이메일 입력: " );
+                                String inputEmail = sc.nextLine();
+                                User findEmailUser = userService.getUserEmail(inputEmail);
+                                System.out.println("유저 이름 : " + findEmailUser);
+                            } else if(inputFind == 2) {
+                                System.out.println("전화번호 입력: ");
+                                String inputPhone = sc.nextLine();
+                                User findPhoneUser = userService.getUserPhone(inputPhone);
+                                System.out.println("유저 이름 : " + findPhoneUser);
                             }
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("잘못된 ID 형식입니다.");
+                        }catch (IllegalArgumentException e){
+                            System.out.println("1, 2번 중 하나를 선택해주세요");
                         }
                         break;
-
+                    }
                     case 3:
                         // 전체 조회
                         List<User> all = userService.getall();
@@ -183,10 +190,40 @@ public class JavaApplication {
                         }
                         break;
 
-                    case 4:
-                        // 수정
-                        System.out.println("수정할 유저 ID 넣기");
-                        String inputId = sc.nextLine();
+                    case 4:{
+                        // 유저 이름으로
+                        System.out.println("1. 이메일로 유저 조회하기");
+                        System.out.println("2. 전화번호로 유저 조회하기");
+                        int inputEdit = sc.nextInt();
+                        sc.nextLine();
+                        try{
+                            if(inputEdit == 1) {
+                                System.out.println("이메일 입력: " );
+                                String inputEmail = sc.nextLine();
+
+                                System.out.println("이름 수정하기");
+                                String newUsername = sc.nextLine();
+                                System.out.println("이메일 수정하기");
+                                String newEmail = sc.nextLine();
+                                System.out.println("전화번호 수정하기");
+                                String newPhone = sc.nextLine();
+                                User editUserEmail= userService.editUser(user.get(id), newUsername, newEmail, newPhone);
+                                System.out.println("수정됐습니다\n" + editUserEmail);
+                            }
+                            else if(inputEdit == 2) {
+                                System.out.println("전화번호 입력: ");
+                                String inputPhone = sc.nextLine();
+                            }
+                        }catch (IllegalArgumentException e) {
+                            System.out.println("1, 2번 중 하나를 선택해주세요");
+                        }
+                    }
+
+
+
+                        /*// 수정
+                        System.out.println("수정할 유저 이름 넣기");
+                        String inputName = sc.nextLine();
 
                         System.out.println("이름 수정하기");
                         String newUsername = sc.nextLine();
@@ -196,27 +233,27 @@ public class JavaApplication {
                         String newPhone = sc.nextLine();
 
                         try{
-                            java.util.UUID uuid = java.util.UUID.fromString(inputId);
+                            java.util.UUID uuid = java.util.UUID.fromString(inputName);
                             User edit= userService.editUser(uuid, newUsername, newEmail, newPhone);
 
                             if(edit != null) {
                                 System.out.println("수정 완료");
                                 System.out.println(edit);
-                                System.out.println("수정 시간" +edit.getUpdatedAt());
+                                System.out.println("수정 시간" + edit.getUpdatedAt());
                             }else {
                                 System.out.println("수정 실패: 해당 ID를 찾을 수 없습니다.");
                             }
                         } catch (IllegalArgumentException e) {
                             System.out.println("잘못된 ID 형식입니다.");
                         }
-                        break;
+                        break;*/
 
                     case 5:
                         // 삭제
                         System.out.println("삭제할 유저 ID 입력하기");
                         String InputID = sc.nextLine();
                         try{
-                            java.util.UUID uuid = java.util.UUID.fromString(InputID);
+                            UUID uuid = UUID.fromString(InputID);
                             boolean isDeleted = userService.delUser(uuid);
                             if(isDeleted) {
                                 System.out.println("삭제 됐습니다");
@@ -255,10 +292,10 @@ public class JavaApplication {
                 {
                     case 1:{
                         // 메세지 전달
-                        // User ID 입력
-                        System.out.println("작성자 User ID 입력하기");
-                        String userId = sc.nextLine();
-                        User user = userService.getUser(UUID.fromString(userId));
+                        // User ID 입력 user
+                        System.out.println("유저 이름 입력하기");
+                        String userName = sc.nextLine();
+                        User user = userService.getUserName(userName);
 
                         // Ch ID 입력
                         System.out.println("채널 ID 입력하기");
@@ -270,7 +307,7 @@ public class JavaApplication {
 
                         try{
                             Message sendMsg = messageService.sendMsg(
-                                    chatroom.getId(), user.getId(), inputMsg);
+                                    chatroom.getId(), user.getUsername(), inputMsg);
                             System.out.println("메세지 ID" + sendMsg.getId());
                             System.out.println("생성 시간" + sendMsg.getCreatedAt());
 

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface MessageService {
     // 생성
-    Message sendMsg(UUID chatRoomid, UUID authorid, String content);
+    Message sendMsg(UUID chatRoomid, String userName, String content);
 
     // 조회
     Message getMsg(UUID id);

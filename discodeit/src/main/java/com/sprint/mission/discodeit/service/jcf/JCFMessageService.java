@@ -26,8 +26,8 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public Message sendMsg(UUID chatRoomid, UUID authorid, String content) {
-        User author = userService.getUser(authorid);
+    public Message sendMsg(UUID chatRoomid, String userName, String content) {
+        User author = userService.getUserName(userName);
         if(author == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디");
         }
@@ -35,7 +35,7 @@ public class JCFMessageService implements MessageService {
         if(channel == null) {
             throw new IllegalArgumentException("존재하지 않는 채널");
         }
-        Message msg = new Message(chatRoomid, authorid, content);
+        Message msg = new Message(chatRoomid, userName, content);
         data.put(msg.getId(), msg);
         return msg;
     }

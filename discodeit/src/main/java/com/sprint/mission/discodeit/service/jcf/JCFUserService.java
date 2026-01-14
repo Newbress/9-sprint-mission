@@ -12,14 +12,38 @@ public class JCFUserService implements UserService {
     private final Map<UUID, User> data = new HashMap<>();
 
     @Override
-    public User addUser(User user) {
-       return data.put(user.getId(), user);
-
+    public User addUser(String inputUsername, String inputEmail, String inputPhone) {
+        User newusers = new User(inputUsername, inputEmail, inputPhone);
+        data.put(newusers.getId(), newusers);
+        return newusers;
     }
 
     @Override
-    public User getUser(UUID id) {
-        return data.get(id);
+    public User getUserName(String userName) {
+        return null;
+    }
+
+
+    @Override
+    public User getUserEmail(String email) {
+        for(User user : data.values()){
+            user.getEmail();
+            if(user.getEmail().equals(email)){
+                return user;
+            }
+        }
+        throw new IllegalArgumentException("해당 이메일 없음");
+    }
+
+    @Override
+    public User getUserPhone(String phone) {
+        for(User user : data.values()){
+            user.getPhone();
+            if(user.getPhone().equals(phone)) {
+                return user;
+            }
+        }
+        throw new IllegalArgumentException("해당 전화번호 없음");
     }
 
     @Override
@@ -32,11 +56,11 @@ public class JCFUserService implements UserService {
         User user = data.get(id);
         if(user == null) {
             return null;
-        } else {
-            user.update(newUsername, newEmail, newPhone);
-            data.put(id, user);
-            return user;
         }
+        user.update(newUsername, newEmail, newPhone);
+        data.put(id, user);
+        return user;
+
     }
 
     @Override

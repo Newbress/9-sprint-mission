@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public class Channel {
     private final UUID id;
-    private final long createdAt;
-    private long updatedAt;
+    private final Long createdAt;
+    private Long updatedAt;
     private String Chatroom; //chat room
 
     public Channel(String chatroom) {

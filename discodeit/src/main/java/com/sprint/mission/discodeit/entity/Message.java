@@ -6,20 +6,20 @@ import java.util.UUID;
 
 public class Message {
     private final UUID id;
-    private final long createdAt;
-    private long updatedAt;
-    private final UUID authorid;
+    private final Long createdAt;
+    private Long updatedAt;
+    private String userName;
     private final UUID chatRoomid;
     private String content;
 
 
-    public Message( UUID chatroomid, UUID authorid, String content) {
+    public Message( UUID chatroomid, String userName, String content) {
         this.id = UUID.randomUUID();
         long now = System.currentTimeMillis();
         this.createdAt = now;
         this.updatedAt = now;
         this.chatRoomid = chatroomid;
-        this.authorid = authorid;
+        this.userName = userName;
         this.content = content;
     }
 
@@ -37,8 +37,8 @@ public class Message {
         return sdf.format(new Date(this.updatedAt));
     }
 
-    public UUID getAuthorid() {
-        return authorid;
+    public String getUserName() {
+        return userName;
     }
 
     public UUID getChatRoomid() {
@@ -56,7 +56,7 @@ public class Message {
     @Override
     public String toString() {
         return "채널 ID: " + chatRoomid + "\n" +
-                "작성자 ID: " + authorid + "\n" +
+                "작성자 ID: " + userName + "\n" +
                 "메세지 내용: " + content + "\n" +
                 "메세지 ID: " + id + "\n";
     }
