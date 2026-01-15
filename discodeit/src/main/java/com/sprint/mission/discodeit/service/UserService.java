@@ -19,7 +19,7 @@ public interface UserService {
     List<User> getall();
 
     // 수정
-    User editUser(UUID id, String newUsername, String newEmail, String newPhone);
+    User editUser(User findThing,String newUsername, String newEmail, String newPhone);
 
     // 삭제
     boolean delUser(UUID id);

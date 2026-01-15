@@ -13,13 +13,21 @@ public class JCFChannelService implements ChannelService {
     private final Map<UUID, Channel> data = new HashMap<>();
 
     @Override
-    public Channel addCh(Channel ch) {
-        return data.put(ch.getId(),ch);
+    public Channel addCh(String inputchannelname) {
+        Channel newChannel = new Channel(inputchannelname);
+        data.put(newChannel.getId(),newChannel);
+        return newChannel;
     }
 
     @Override
-    public Channel getCh(UUID id) {
-        return data.get(id);
+    public Channel getCh(String channelName) {
+        for(Channel channel : data.values()) {
+            channel.getChannelName();
+            if(channel.getChannelName().equals(channelName)) {
+                return channel;
+            }
+        }
+        throw new IllegalArgumentException("해당 채널 없습니다.");
     }
 
     @Override

@@ -8,14 +8,14 @@ public class Channel {
     private final UUID id;
     private final Long createdAt;
     private Long updatedAt;
-    private String Chatroom; //chat room
+    private String channelName; //chat room
 
-    public Channel(String chatroom) {
+    public Channel(String channelName) {
         this.id = UUID.randomUUID();
         long now = System.currentTimeMillis();
         this.createdAt = now;
         this.updatedAt = now;
-        this.Chatroom = chatroom;
+        this.channelName = channelName;
     }
 
     public UUID getId() {
@@ -32,18 +32,18 @@ public class Channel {
         return sdf.format(new Date(this.updatedAt));
     }
 
-    public String getChatroom() {
-        return Chatroom;
+    public String getChannelName() {
+        return channelName;
     }
 
-    public void update(String newChatroom) {
-        this.Chatroom = newChatroom;
+    public void update(String newchannelName) {
+        this.channelName = newchannelName;
 
     }
 
     @Override
     public String toString() {
-        return "채널 이름='" + Chatroom + "\n" +
+        return "채널 이름: " + channelName + "\n" +
                 "채널 ID: "+ id + "\n";
     }
 }

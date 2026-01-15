@@ -7,10 +7,10 @@ import java.util.UUID;
 
 public interface ChannelService {
     // 생성
-    Channel addCh(Channel ch);
+    Channel addCh(String inputchannelname);
 
     // 조회
-    Channel getCh(UUID id);
+    Channel getCh(String channelName);
 
     // 전체조회
     List<Channel> getall();

@@ -26,16 +26,16 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public Message sendMsg(UUID chatRoomid, String userName, String content) {
+    public Message sendMsg(String channelName, String userName, String content) {
         User author = userService.getUserName(userName);
         if(author == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디");
         }
-        Channel channel = channelService.getCh(chatRoomid);
+        Channel channel = channelService.getCh(channelName);
         if(channel == null) {
             throw new IllegalArgumentException("존재하지 않는 채널");
         }
-        Message msg = new Message(chatRoomid, userName, content);
+        Message msg = new Message(channelName, userName, content);
         data.put(msg.getId(), msg);
         return msg;
     }
@@ -43,6 +43,22 @@ public class JCFMessageService implements MessageService {
     @Override
     public Message getMsg(UUID id) {
         return data.get(id);
+    }
+
+    @Override
+    //유저의 메세지 조회
+    public Message getUserMsg(String userMsg ) {
+        for(Message msg : data.values()) {
+            String userName = msg.getUserName();
+            User user = userService.getUserName()
+
+        }
+
+    }
+    @Override
+    //채널의 메세지 조회
+    public Message getChannelMsg(String ChannelMsg) {
+        return null;
     }
 
     @Override

@@ -7,10 +7,14 @@ import java.util.UUID;
 
 public interface MessageService {
     // 생성
-    Message sendMsg(UUID chatRoomid, String userName, String content);
+    Message sendMsg(String channelName, String userName, String content);
 
     // 조회
     Message getMsg(UUID id);
+
+    Message getUserMsg(String userMsg);
+
+    Message getChannelMsg(String channelMsg);
 
     // 전체 조회
     List<Message> getall();

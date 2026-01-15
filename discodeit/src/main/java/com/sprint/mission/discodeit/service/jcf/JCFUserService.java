@@ -20,6 +20,11 @@ public class JCFUserService implements UserService {
 
     @Override
     public User getUserName(String userName) {
+        for (User user : data.values()) {
+            if (user.getUserName().equals(userName)) {
+                return user;
+            }
+        }
         return null;
     }
 
@@ -52,13 +57,9 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public User editUser(UUID id, String newUsername, String newEmail, String newPhone) {
-        User user = data.get(id);
-        if(user == null) {
-            return null;
-        }
+    public User editUser(User findThing, String newUsername, String newEmail, String newPhone) {
+        User user = data.get(findThing.getId());
         user.update(newUsername, newEmail, newPhone);
-        data.put(id, user);
         return user;
 
     }

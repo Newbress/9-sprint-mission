@@ -36,7 +36,7 @@ public class User{
         return sdf.format(new Date(this.updatedAt));
     }
 
-    public String getUsername() {
+    public String getUserName() {
         return userName;
     }
 
