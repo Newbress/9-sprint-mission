@@ -9,7 +9,7 @@ public interface UserService {
     User addUser(String inputUsername, String inputEmail, String inputPhone);
 
     // 조회
-    User getUserName(String userName);
+    User findUserName(String userName);
 
     User getUserEmail(String email);
 

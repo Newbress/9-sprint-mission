@@ -27,7 +27,7 @@ public class JCFMessageService implements MessageService {
 
     @Override
     public Message sendMsg(String channelName, String userName, String content) {
-        User author = userService.getUserName(userName);
+        User author = userService.findUserName(userName);
         if(author == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디");
         }
@@ -41,30 +41,50 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public Message getMsg(UUID id) {
-        return data.get(id);
-    }
-
-    @Override
     //유저의 메세지 조회
     public Message getUserMsg(String userMsg ) {
         for(Message msg : data.values()) {
             String userName = msg.getUserName();
-            User user = userService.getUserName()
-
+            if(userName != null && userName.equals(userMsg))
+                return msg;
         }
-
+        return null;
     }
     @Override
     //채널의 메세지 조회
-    public Message getChannelMsg(String ChannelMsg) {
+    public Message getChannelMsg(String channelMsg) {
+        for(Message msg : data.values()) {
+            String channelName = msg.getChannelName();
+            if(channelName != null && channelName.equals(channelMsg)) {
+                return msg;
+            }
+        }
         return null;
     }
 
     @Override
-    public List<Message> getall() {
-        return new ArrayList<>(data.values());
+    public List<Message> getUserAll(String inputUser) {
+        for(Message msg : data.values())
+        {
+            String userName = msg.getUserName();
+            if(userName != null && userName.equals(userName)) {
+                return new ArrayList<>(data.values());
+            }
+        }
+        return null;
     }
+
+    @Override
+    public List<Message> getChannelAll(String inputChannel) {
+        for(Message msg : data.values()) {
+            String channelName = msg.getChannelName();
+            if(channelName != null && channelName.equals(channelName)) {
+                return new ArrayList<>(data.values());
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public Message editMsg(UUID id, String newContent) {

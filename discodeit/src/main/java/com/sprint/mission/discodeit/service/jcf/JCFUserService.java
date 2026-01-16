@@ -19,7 +19,7 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public User getUserName(String userName) {
+    public User findUserName(String userName) {
         for (User user : data.values()) {
             if (user.getUserName().equals(userName)) {
                 return user;
