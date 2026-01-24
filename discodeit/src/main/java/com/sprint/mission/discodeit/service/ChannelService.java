@@ -10,10 +10,10 @@ public interface ChannelService {
     Channel addCh(String inputchannelname);
 
     // 조회
-    Channel getCh(String channelName);
+    Channel findCh(String channelName);
 
     // 전체조회
-    List<Channel> getall();
+    List<Channel> findAll();
     // 수정
     Channel editCh(UUID id, String newChatroom);
 

@@ -1,9 +1,25 @@
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+
+import com.sprint.mission.discodeit.repository.ChannelRepository;
+import com.sprint.mission.discodeit.repository.MessageRepository;
+import com.sprint.mission.discodeit.repository.UserRepository;
+
+import com.sprint.mission.discodeit.repository.file.FileChannelRepository;
+import com.sprint.mission.discodeit.repository.file.FileMessageRepository;
+import com.sprint.mission.discodeit.repository.file.FileUserRepository;
+
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
+
+import com.sprint.mission.discodeit.service.basic.basicChannelService;
+import com.sprint.mission.discodeit.service.basic.basicMessageService;
+import com.sprint.mission.discodeit.service.basic.basicUserService;
+import com.sprint.mission.discodeit.service.file.FileChannelService;
+import com.sprint.mission.discodeit.service.file.FileUserService;
+
 import com.sprint.mission.discodeit.service.jcf.JCFChannelService;
 import com.sprint.mission.discodeit.service.jcf.JCFMessageService;
 import com.sprint.mission.discodeit.service.jcf.JCFUserService;
@@ -13,9 +29,24 @@ import java.util.UUID;
 
 public class JavaApplication {
     public static void main(String[] args) {
-        ChannelService channelService = new JCFChannelService();
-        UserService userService = new JCFUserService();
-        MessageService messageService = new JCFMessageService(userService, channelService);
+
+        //UserService userService = new FileUserService();
+        //ChannelService channelService = new FileChannelService();
+        //ChannelService channelService = new JCFChannelService();
+        //UserService userService = new JCFUserService();
+        //MessageService messageService = new JCFMessageService(userService, channelService);
+
+        UserRepository userRepository = new FileUserRepository();
+        ChannelRepository channelRepository = new FileChannelRepository();
+        MessageRepository messageRepository = new FileMessageRepository();
+        
+        UserService userService = new basicUserService(userRepository);
+        ChannelService channelService = new basicChannelService(channelRepository);
+        MessageService messageService = new basicMessageService(
+                messageRepository,
+                userRepository,
+                channelRepository
+        );
 
 
         boolean isRunning = true;
@@ -60,7 +91,7 @@ public class JavaApplication {
                         System.out.println("채널 이름 입력하기");
                         String inputChannelName = sc.nextLine();
                         try {
-                            Channel findChannelName = channelService.getCh(inputChannelName);
+                            Channel findChannelName = channelService.findCh(inputChannelName);
                             System.out.println("단건 조회: \n" + findChannelName);
                         }catch (IllegalArgumentException e) {
                             System.out.println("잘못 입력했습니다.");
@@ -70,7 +101,7 @@ public class JavaApplication {
 
                     case 3:
                         //전체 조회
-                        List<Channel> all = channelService.getall();
+                        List<Channel> all = channelService.findAll();
                         for(Channel c : all) {
                             System.out.println(c);
                         }
@@ -288,7 +319,7 @@ public class JavaApplication {
                         // Ch ID 입력
                         System.out.println("채널 이름 입력하기");
                         String inputChannelName = sc.nextLine();
-                        Channel channelName = channelService.getCh(inputChannelName);
+                        Channel channelName = channelService.findCh(inputChannelName);
                         if(channelName == null) {
                             System.out.println("잘못 입력했습니다 다시 확인하세요.");
                             break;
@@ -299,7 +330,9 @@ public class JavaApplication {
 
                         try{
                             Message sendMsg = messageService.sendMsg(
-                                    channelName.getChannelName(), user.getUserName(), inputMsg);
+                                    channelName.findChannelName(), user.getUserName(), inputMsg);
+                            sendMsg.setUserId(user.getId());
+                            sendMsg.setChannelId(channelName.getId());
                             System.out.println("메세지 ID: " + sendMsg.getId());
                             System.out.println("생성 시간: " + sendMsg.getCreatedAt());
 
@@ -311,51 +344,65 @@ public class JavaApplication {
                     }
 
                     case 2:{
-                        // 유저/채널를 입력해 메세지 조회하기
-                        System.out.println("1. 유저로 메세지 조회하기");
-                        System.out.println("2. 채널로 메세지 조회하기");
-                        int inputFind = sc.nextInt();
-                        sc.nextLine();
+                        System.out.println("메세지 조회하기");
+                        String inputMsgId = sc.nextLine();
                         try{
-                            if(inputFind == 1) {
-                                System.out.println("유저 이름 입력: ");
-                                String inputUserName = sc.nextLine();
-                                Message userMsg = messageService.getUserMsg(inputUserName);
-                                System.out.println("유저 메세지 조회: \n" + userMsg);
-                            } else if(inputFind == 2) {
-                                System.out.println("채널 이름 입력: ");
-                                String inputChannelName = sc.nextLine();
-                                Message userMsg = messageService.getChannelMsg(inputChannelName);
-                                System.out.println("채널 메세지 조회: \n" + userMsg);
-                            }
-
+                            Message findMsgId = messageService.findMsgId(inputMsgId);
+                            System.out.printf("단건 조회: \n"+ findMsgId);
                         }catch (IllegalArgumentException e) {
-                            System.out.println("잘못 입력했습니다. 다시 입력하세요");
-                        }
-                        break;
+                            System.out.println("잘못 입력했습니다.");
+                        }break;
+//                        // 유저/채널를 입력해 메세지 조회하기
+//                        int inputFind = sc.nextInt();
+//                        sc.nextLine();
+//                        try{
+//                            if(inputFind == 1) {
+//                                System.out.println("유저 이름 입력: ");
+//                                String inputUserName = sc.nextLine();
+//                                Message userMsg = messageService.getUserMsg(inputUserName);
+//                                System.out.println("유저 메세지 조회: \n" + userMsg);
+//                            } else if(inputFind == 2) {
+//                                System.out.println("채널 이름 입력: ");
+//                                String inputChannelName = sc.nextLine();
+//                                Message userMsg = messageService.getChannelMsg(inputChannelName);
+//                                System.out.println("채널 메세지 조회: \n" + userMsg);
+//                            }
+//
+//                        }catch (IllegalArgumentException e) {
+//                            System.out.println("잘못 입력했습니다. 다시 입력하세요");
+//                        }
+//                        break;
                     }
 
                     case 3: {
+
+                        List<Message> findAllMsg = messageService.findAllMstId();
+                        for (Message msg : findAllMsg) {
+                            System.out.println(msg);
+                        }
+                        break;
+
+
                         // 유저/채널를 입력해 전체 메세지 조회
-                        System.out.println("1. 유저로 전체 메세지 조회하기");
-                        System.out.println("2. 채널로 전체 메세지 조회하기");
-                        int inputFind  = sc.nextInt();
-                        sc.nextLine();
-                        try{
-                            if(inputFind == 1) {
-                                System.out.println("유저 이름 : ");
-                                String inputUserName = sc.nextLine();
-                                List<Message> userMsg= messageService.getUserAll(inputUserName);
-                                System.out.println("유저 전체 메세지 조회 : \n" + userMsg);
-                            } else if(inputFind == 2) {
-                                System.out.println("채널 이름 : ");
-                                String inputChannelName = sc.nextLine();
-                                List<Message> channelMsg = messageService.getChannelAll(inputChannelName);
-                                System.out.println("채널 전체 메세지 조회 : \n" + channelMsg);
-                            }
-                        } catch (IllegalArgumentException e) {
-                            System.out.println("잘못 입력했습니다. 다시 입력하세요라");
-                        }break;
+//                        System.out.println("1. 유저로 전체 메세지 조회하기");
+//                        System.out.println("2. 채널로 전체 메세지 조회하기");
+//                        int inputFind  = sc.nextInt();
+//                        sc.nextLine();
+//                        try{
+//                            if(inputFind == 1) {
+//                                System.out.println("유저 이름 : ");
+//                                String inputUserName = sc.nextLine();
+//                                List<Message> userMsg= messageService.getUserAll(inputUserName);
+//                                System.out.println("유저 전체 메세지 조회 : \n" + userMsg);
+//                            } else if(inputFind == 2) {
+//                                System.out.println("채널 이름 : ");
+//                                String inputChannelName = sc.nextLine();
+//                                List<Message> channelMsg = messageService.getChannelAll(inputChannelName);
+//                                System.out.println("채널 전체 메세지 조회 : \n" + channelMsg);
+//                            }
+//                        } catch (IllegalArgumentException e) {
+//                            System.out.println("잘못 입력했습니다. 다시 입력하세요라");
+//                        }break;
                     }
 
                     case 4:{

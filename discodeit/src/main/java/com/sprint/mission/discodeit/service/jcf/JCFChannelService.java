@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.service.jcf;
 
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.util.ArrayList;
@@ -11,6 +12,11 @@ import java.util.UUID;
 
 public class JCFChannelService implements ChannelService {
     private final Map<UUID, Channel> data = new HashMap<>();
+    private final ChannelRepository channelRepository;
+
+    public JCFChannelService(ChannelRepository channelRepository) {
+        this.channelRepository = channelRepository;
+    }
 
     @Override
     public Channel addCh(String inputchannelname) {
@@ -20,10 +26,10 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public Channel getCh(String channelName) {
+    public Channel findCh(String channelName) {
         for(Channel channel : data.values()) {
-            channel.getChannelName();
-            if(channel.getChannelName().equals(channelName)) {
+            channel.findChannelName();
+            if(channel.findChannelName().equals(channelName)) {
                 return channel;
             }
         }
@@ -31,7 +37,7 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public List<Channel> getall() {
+    public List<Channel> findAll() {
         return new ArrayList<>(data.values());
     }
 

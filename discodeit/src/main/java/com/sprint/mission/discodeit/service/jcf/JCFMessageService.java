@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
@@ -16,11 +17,13 @@ import java.util.UUID;
 
 public class JCFMessageService implements MessageService {
     private final Map<UUID, Message> data = new HashMap<>();
+    private final MessageRepository messageRepository;
 
     private final UserService userService;
     private final ChannelService channelService;
 
-    public JCFMessageService (UserService userService, ChannelService channelService) {
+    public JCFMessageService (MessageRepository messageRepository, UserService userService, ChannelService channelService) {
+        this.messageRepository = messageRepository;
         this.userService = userService;
         this.channelService = channelService;
     }
@@ -31,13 +34,18 @@ public class JCFMessageService implements MessageService {
         if(author == null) {
             throw new IllegalArgumentException("존재하지 않는 아이디");
         }
-        Channel channel = channelService.getCh(channelName);
+        Channel channel = channelService.findCh(channelName);
         if(channel == null) {
             throw new IllegalArgumentException("존재하지 않는 채널");
         }
         Message msg = new Message(channelName, userName, content);
         data.put(msg.getId(), msg);
         return msg;
+    }
+
+    @Override
+    public Message findMsgId(String msgId) {
+        return null;
     }
 
     @Override
@@ -60,6 +68,11 @@ public class JCFMessageService implements MessageService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<Message> findAllMstId() {
+        return List.of();
     }
 
     @Override

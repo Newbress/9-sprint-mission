@@ -10,12 +10,13 @@ public interface MessageService {
     Message sendMsg(String channelName, String userName, String content);
 
     // 조회
-
+    Message findMsgId(String msgID);
     Message getUserMsg(String userMsg);
 
     Message getChannelMsg(String channelMsg);
 
     // 전체 조회
+    List<Message> findAllMstId();
 
     List<Message> getUserAll(String inputUser);
 

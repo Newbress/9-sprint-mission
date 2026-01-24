@@ -15,6 +15,10 @@ public interface UserService {
 
     User getUserPhone(String phone);
 
+    // 파일 조회
+
+    User fileFindID(UUID id);
+
     // 전체 조회
     List<User> getall();
 

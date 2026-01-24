@@ -1,10 +1,12 @@
 package com.sprint.mission.discodeit.entity;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class Channel {
+public class Channel implements Serializable {
+    private static final long serialVersionUID = 1L;
     private final UUID id;
     private final Long createdAt;
     private Long updatedAt;
@@ -32,7 +34,7 @@ public class Channel {
         return sdf.format(new Date(this.updatedAt));
     }
 
-    public String getChannelName() {
+    public String findChannelName() {
         return channelName;
     }
 

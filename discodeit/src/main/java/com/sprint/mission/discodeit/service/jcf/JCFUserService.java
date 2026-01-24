@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.service.jcf;
 
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,45 +11,37 @@ import java.util.UUID;
 
 public class JCFUserService implements UserService {
     private final Map<UUID, User> data = new HashMap<>();
+    private final UserRepository userRepository;
+
+    public JCFUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User addUser(String inputUsername, String inputEmail, String inputPhone) {
         User newusers = new User(inputUsername, inputEmail, inputPhone);
-        data.put(newusers.getId(), newusers);
-        return newusers;
+        return userRepository.saveUser(newusers);
     }
 
     @Override
     public User findUserName(String userName) {
-        for (User user : data.values()) {
-            if (user.getUserName().equals(userName)) {
-                return user;
-            }
-        }
-        return null;
+        return userRepository.findUserName(userName);
     }
 
 
     @Override
     public User getUserEmail(String email) {
-        for(User user : data.values()){
-            user.getEmail();
-            if(user.getEmail().equals(email)){
-                return user;
-            }
-        }
-        throw new IllegalArgumentException("해당 이메일 없음");
+        return userRepository.getUserEmail(email);
     }
 
     @Override
     public User getUserPhone(String phone) {
-        for(User user : data.values()){
-            user.getPhone();
-            if(user.getPhone().equals(phone)) {
-                return user;
-            }
-        }
-        throw new IllegalArgumentException("해당 전화번호 없음");
+        return userRepository.getUserPhone(phone);
+    }
+
+    @Override
+    public User fileFindID(UUID id) {
+        return null;
     }
 
     @Override
