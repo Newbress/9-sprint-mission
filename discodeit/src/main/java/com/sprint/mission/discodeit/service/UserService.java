@@ -1,0 +1,30 @@
+package com.sprint.mission.discodeit.service;
+
+import com.sprint.mission.discodeit.entity.User;
+import java.util.List;
+import java.util.UUID;
+
+public interface UserService {
+    // 생성
+    User addUser(String inputUsername, String inputEmail, String inputPhone);
+
+    // 조회
+    User findUserName(String userName);
+
+    User getUserEmail(String email);
+
+    User getUserPhone(String phone);
+
+    // 파일 조회
+
+    User fileFindID(UUID id);
+
+    // 전체 조회
+    List<User> getall();
+
+    // 수정
+    User editUser(User findThing,String newUsername, String newEmail, String newPhone);
+
+    // 삭제
+    boolean delUser(UUID id);
+}
