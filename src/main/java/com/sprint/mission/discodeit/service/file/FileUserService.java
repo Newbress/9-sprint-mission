@@ -1,6 +1,12 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.entity.DTO.User.UserCreateDTO;
+import com.sprint.mission.discodeit.entity.DTO.User.UserFindDTO;
+import com.sprint.mission.discodeit.entity.DTO.User.UserUpdateDTO;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.repository.BinaryContentRepository;
+import com.sprint.mission.discodeit.repository.UserRepository;
+import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
 
 import java.io.*;
@@ -15,8 +21,14 @@ import java.util.UUID;
 public class FileUserService implements UserService {
     private final Path DIRECTORY;
     private final String EXTENSION = ".ser";
+    private final UserRepository userRepository;
+    private final BinaryContentRepository binaryContentRepository;
+    private final UserStatusRepository userStatusRepository;
 
-    public FileUserService() {
+    public FileUserService(UserRepository userRepository, BinaryContentRepository binaryContentRepository, UserStatusRepository userStatusRepository) {
+        this.userRepository = userRepository;
+        this.binaryContentRepository = binaryContentRepository;
+        this.userStatusRepository = userStatusRepository;
         this.DIRECTORY = Paths.get(System.getProperty("user.dir"), "file-data-map", User.class.getSimpleName());
         if (Files.notExists(DIRECTORY)) {
             try {
@@ -48,6 +60,11 @@ public class FileUserService implements UserService {
     }
 
     @Override
+    public User createDTO(UserCreateDTO userCreateDTO) {
+        return null;
+    }
+
+    @Override
     public User find(UUID userId) {
         User userNullable = null;
         Path path = resolvePath(userId);
@@ -64,6 +81,11 @@ public class FileUserService implements UserService {
 
         return Optional.ofNullable(userNullable)
                 .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
+    }
+
+    @Override
+    public UserFindDTO findDTO(UUID userId) {
+        return null;
     }
 
     @Override
@@ -85,6 +107,11 @@ public class FileUserService implements UserService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<UserFindDTO> findAllDTO() {
+        return List.of();
     }
 
     @Override
@@ -116,6 +143,11 @@ public class FileUserService implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public UserFindDTO updateDTO(UUID userId, UserUpdateDTO dto) {
+        return null;
     }
 
     @Override

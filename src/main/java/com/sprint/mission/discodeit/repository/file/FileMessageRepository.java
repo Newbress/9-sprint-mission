@@ -2,6 +2,9 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
+
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
+@ConditionalOnProperty(name = "discodeit.repository.type", havingValue = "file")
 public class FileMessageRepository implements MessageRepository {
     private final Path DIRECTORY;
     private final String EXTENSION = ".ser";
@@ -62,6 +67,29 @@ public class FileMessageRepository implements MessageRepository {
     }
 
     @Override
+    public Optional<Message> findLastMessageByChannelId(UUID channelId) {
+        File dir = DIRECTORY.toFile();
+        File[] files = dir.listFiles((d, name) -> name.endsWith(EXTENSION));
+        if(files == null) return Optional.empty();
+
+        Message lastMessage = null;
+        for(File file : files){
+            try(FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis)){
+                Message message = (Message) ois.readObject();
+                if (message.getChannelId().equals(channelId)) {
+                    if (lastMessage == null || message.getCreatedAt().isAfter(lastMessage.getCreatedAt())) {
+                        lastMessage = message;
+                    }
+                }
+            } catch(IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public List<Message> findAll() {
         try {
             return Files.list(DIRECTORY)
@@ -83,6 +111,28 @@ public class FileMessageRepository implements MessageRepository {
     }
 
     @Override
+    public List<Message> findAllByChannelId(UUID channelId) {
+        try {
+            return Files.list(DIRECTORY)
+                    .filter(path -> path.toString().endsWith(EXTENSION))
+                    .map(path -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(path.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            return (Message) ois.readObject();
+                        } catch (IOException | ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .filter(message -> message.getChannelId().equals(channelId))
+                    .toList();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public boolean existsById(UUID id) {
         Path path = resolvePath(id);
         return Files.exists(path);
@@ -94,6 +144,27 @@ public class FileMessageRepository implements MessageRepository {
         try {
             Files.delete(path);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteAllByChannelId(UUID channelId) {
+        try{
+            Files.list(DIRECTORY)
+                    .filter(path -> path.toString().endsWith(EXTENSION))
+                    .forEach(path -> {
+                        try (FileInputStream fis = new FileInputStream(path.toFile());
+                             ObjectInputStream ois = new ObjectInputStream(fis)) {
+                            Message message = (Message) ois.readObject();
+                            if (message.getChannelId().equals(channelId)) {
+                                Files.delete(path);
+                            }
+                        } catch (IOException | ClassNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }catch (IOException e){
             throw new RuntimeException(e);
         }
     }

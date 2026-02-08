@@ -1,52 +1,34 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class Message implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private UUID id;
-    private Long createdAt;
-    private Long updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
     //
     private String content;
     //
     private UUID channelId;
-    private UUID authorId;
+    private UUID userId;
+    private List<UUID> attachmentIds;
 
-    public Message(String content, UUID channelId, UUID authorId) {
+    public Message(String content, UUID channelId, UUID userId) {
         this.id = UUID.randomUUID();
-        this.createdAt = Instant.now().getEpochSecond();
+        Instant now = Instant.now();
+        this.createdAt = now;
         //
         this.content = content;
         this.channelId = channelId;
-        this.authorId = authorId;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public UUID getChannelId() {
-        return channelId;
-    }
-
-    public UUID getAuthorId() {
-        return authorId;
+        this.userId = userId;
     }
 
     public void update(String newContent) {
@@ -57,7 +39,7 @@ public class Message implements Serializable {
         }
 
         if (anyValueUpdated) {
-            this.updatedAt = Instant.now().getEpochSecond();
+            this.updatedAt = Instant.now();
         }
     }
 }

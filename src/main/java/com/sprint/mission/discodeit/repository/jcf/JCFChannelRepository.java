@@ -1,10 +1,15 @@
 package com.sprint.mission.discodeit.repository.jcf;
 
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository
+@ConditionalOnProperty(name = "discodeit.repository.type",havingValue = "jcf", matchIfMissing = true)
 public class JCFChannelRepository implements ChannelRepository {
     private final Map<UUID, Channel> data;
 
@@ -26,6 +31,20 @@ public class JCFChannelRepository implements ChannelRepository {
     @Override
     public List<Channel> findAll() {
         return this.data.values().stream().toList();
+    }
+
+    @Override
+    public List<Channel> findAllByType(ChannelType type) {
+        return this.data.values().stream()
+                .filter(channel -> channel.getType().equals(type))
+                .toList();
+    }
+
+    @Override
+    public List<Channel> findAllById(Set<UUID> channelId) {
+        return this.data.values().stream()
+                .filter(channel -> channelId.contains(channel.getId()))
+                .toList();
     }
 
     @Override

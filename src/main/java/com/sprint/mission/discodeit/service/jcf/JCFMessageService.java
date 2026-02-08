@@ -1,5 +1,9 @@
 package com.sprint.mission.discodeit.service.jcf;
 
+import com.sprint.mission.discodeit.entity.DTO.Message.MessageCreateDTO;
+import com.sprint.mission.discodeit.entity.DTO.Message.MessageFindDTO;
+import com.sprint.mission.discodeit.entity.DTO.Message.MessageUpdateDTO;
+import com.sprint.mission.discodeit.entity.DTO.User.UserUpdateDTO;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -35,6 +39,11 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
+    public Message createDTO(MessageCreateDTO dto) {
+        return null;
+    }
+
+    @Override
     public Message find(UUID messageId) {
         Message messageNullable = this.data.get(messageId);
 
@@ -48,6 +57,11 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
+    public List<Message> findAllByChannelId(UUID channelId) {
+        return List.of();
+    }
+
+    @Override
     public Message update(UUID messageId, String newContent) {
         Message messageNullable = this.data.get(messageId);
         Message message = Optional.ofNullable(messageNullable)
@@ -55,6 +69,11 @@ public class JCFMessageService implements MessageService {
         message.update(newContent);
 
         return message;
+    }
+
+    @Override
+    public Message updateDTO(UUID messageId, MessageUpdateDTO dto) {
+        return null;
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.entity.DTO.Message.MessageCreateDTO;
+import com.sprint.mission.discodeit.entity.DTO.Message.MessageFindDTO;
+import com.sprint.mission.discodeit.entity.DTO.Message.MessageUpdateDTO;
+import com.sprint.mission.discodeit.entity.DTO.User.UserUpdateDTO;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -63,6 +67,11 @@ public class FileMessageService implements MessageService {
     }
 
     @Override
+    public Message createDTO(MessageCreateDTO dto) {
+        return null;
+    }
+
+    @Override
     public Message find(UUID messageId) {
         Message messageNullable = null;
         Path path = resolvePath(messageId);
@@ -80,6 +89,7 @@ public class FileMessageService implements MessageService {
         return Optional.ofNullable(messageNullable)
                 .orElseThrow(() -> new NoSuchElementException("Message with id " + messageId + " not found"));
     }
+
 
     @Override
     public List<Message> findAll() {
@@ -103,6 +113,11 @@ public class FileMessageService implements MessageService {
     }
 
     @Override
+    public List<Message> findAllByChannelId(UUID channelId) {
+        return List.of();
+    }
+
+    @Override
     public Message update(UUID messageId, String newContent) {
         Message messageNullable = null;
         Path path = resolvePath(messageId);
@@ -122,6 +137,11 @@ public class FileMessageService implements MessageService {
         message.update(newContent);
 
         return message;
+    }
+
+    @Override
+    public Message updateDTO(UUID messageId, MessageUpdateDTO dto) {
+        return null;
     }
 
     @Override

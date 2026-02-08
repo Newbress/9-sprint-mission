@@ -2,6 +2,8 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,6 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
+@ConditionalOnProperty(name = "discodeit.repository.type", havingValue = "file")
 public class FileUserRepository implements UserRepository {
     private final Path DIRECTORY;
     private final String EXTENSION = ".ser";
@@ -62,6 +66,28 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByUsername(String username) {
+        File dir = DIRECTORY.toFile();
+        File[] fileList = dir.listFiles();
+
+        if(fileList == null) {
+            return Optional.empty();
+        }
+        for(File file : fileList) {
+            try(FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream ois = new ObjectInputStream(fis)){
+                User user = (User) ois.readObject();
+                if(user.getUsername().equals(username)){
+                    return Optional.of(user);
+                }
+            }catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
     public List<User> findAll() {
         try {
             return Files.list(DIRECTORY)
@@ -86,6 +112,46 @@ public class FileUserRepository implements UserRepository {
     public boolean existsById(UUID id) {
         Path path = resolvePath(id);
         return Files.exists(path);
+    }
+
+    @Override
+    public boolean existByUsername(String username) {
+        File dir = DIRECTORY.toFile();
+        File[] files = dir.listFiles();
+        if (files == null) return false;
+
+        for (File file : files) {
+            try (FileInputStream fis = new FileInputStream(file);
+                 ObjectInputStream ois = new ObjectInputStream(fis)) {
+                User user = (User) ois.readObject();
+                if (user.getUsername().equals(username)) {
+                    return true;
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean existByEmail(String email) {
+        File dir = DIRECTORY.toFile();
+        File[] files = dir.listFiles();
+        if (files == null) return false;
+
+        for (File file : files) {
+            try (FileInputStream fis = new FileInputStream(file);
+                 ObjectInputStream ois = new ObjectInputStream(fis)) {
+                User user = (User) ois.readObject();
+                if (user.getEmail().equals(email)) {
+                    return true;
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
     }
 
     @Override

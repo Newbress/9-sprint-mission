@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
+import com.sprint.mission.discodeit.entity.DTO.Channel.*;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.io.*;
@@ -49,6 +50,16 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
+    public Channel createDTO(ChannelCreateDTO dto) {
+        return null;
+    }
+
+    @Override
+    public Channel createPrivateDTO(ChannelCreatePrivateDTO dto) {
+        return null;
+    }
+
+    @Override
     public Channel find(UUID channelId) {
         Channel channelNullable = null;
         Path path = resolvePath(channelId);
@@ -65,6 +76,11 @@ public class FileChannelService implements ChannelService {
 
         return Optional.ofNullable(channelNullable)
                 .orElseThrow(() -> new NoSuchElementException("Channel with id " + channelId + " not found"));
+    }
+
+    @Override
+    public ChannelFindDTO findDTO(UUID channelId) {
+        return null;
     }
 
     @Override
@@ -86,6 +102,11 @@ public class FileChannelService implements ChannelService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<ChannelFindDTO> findAllDTO(UUID userId) {
+        return List.of();
     }
 
     @Override
@@ -117,6 +138,11 @@ public class FileChannelService implements ChannelService {
         }
 
         return channel;
+    }
+
+    @Override
+    public ChannelFindDTO updateDTO(UUID id,ChannelUpdateDTO dto) {
+        return null;
     }
 
     @Override
