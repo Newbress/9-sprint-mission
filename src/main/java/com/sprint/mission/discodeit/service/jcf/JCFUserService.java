@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service
 @RequiredArgsConstructor
 public class JCFUserService implements UserService {
     private final Map<UUID, User> data = new HashMap<>();

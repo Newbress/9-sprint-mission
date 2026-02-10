@@ -29,6 +29,13 @@ public class JCFChannelRepository implements ChannelRepository {
     }
 
     @Override
+    public List<Channel> findChannelByUserId(UUID userId) {
+        return this.data.values().stream()
+                .filter(channel -> channel.getUserId().equals(userId))
+                .toList();
+    }
+
+    @Override
     public List<Channel> findAll() {
         return this.data.values().stream().toList();
     }

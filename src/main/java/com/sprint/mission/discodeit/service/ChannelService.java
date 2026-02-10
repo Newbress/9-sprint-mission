@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.DTO.Channel.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ChannelService {
@@ -14,6 +15,7 @@ public interface ChannelService {
 
     Channel find(UUID channelId);
     ChannelFindDTO findDTO(UUID channelId);
+    List<Channel> findChannelByUserID(UUID userId);
 
     List<Channel> findAll();
     List<ChannelFindDTO> findAllDTO(UUID userId);

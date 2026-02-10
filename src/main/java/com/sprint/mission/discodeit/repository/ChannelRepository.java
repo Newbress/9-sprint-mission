@@ -11,6 +11,7 @@ import java.util.UUID;
 public interface ChannelRepository {
     Channel save(Channel channel);
     Optional<Channel> findById(UUID id);
+    List<Channel> findChannelByUserId(UUID userId);
     List<Channel> findAll();
     List<Channel> findAllByType(ChannelType type);
     List<Channel> findAllById(Set<UUID> channelId);

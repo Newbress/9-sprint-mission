@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Channel implements Serializable {
     private static final long serialVersionUID = 1L;
     private UUID id;
+    private UUID userId;
     private Long createdAt;
     private Long updatedAt;
     //
@@ -19,6 +20,7 @@ public class Channel implements Serializable {
 
     public Channel(ChannelType type, String name, String description) {
         this.id = UUID.randomUUID();
+        this.userId = userId;
         this.createdAt = Instant.now().getEpochSecond();
         //
         this.type = type;

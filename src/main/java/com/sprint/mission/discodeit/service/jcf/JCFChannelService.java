@@ -10,14 +10,12 @@ import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-@Service
 @RequiredArgsConstructor
 public class JCFChannelService implements ChannelService {
     private final Map<UUID, Channel> data = new HashMap<>();
@@ -84,6 +82,12 @@ public class JCFChannelService implements ChannelService {
                 lastMessageCreatedAt
         );
     }
+
+    @Override
+    public List<Channel> findChannelByUserID(UUID userId) {
+        return List.of();
+    }
+
 
     @Override
     public List<Channel> findAll() {

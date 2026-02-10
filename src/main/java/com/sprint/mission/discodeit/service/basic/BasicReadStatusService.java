@@ -37,6 +37,8 @@ public class BasicReadStatusService implements ReadStatusService {
         return readStatusRepository.save(readStatus);
     }
 
+
+
     @Override
     public ReadStatus find(UUID id) {
         return readStatusRepository.findById(id)

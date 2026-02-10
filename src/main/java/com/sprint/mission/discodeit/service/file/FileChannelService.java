@@ -84,6 +84,12 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
+    public List<Channel> findChannelByUserID(UUID userId) {
+        return List.of();
+    }
+
+
+    @Override
     public List<Channel> findAll() {
         try {
             return Files.list(DIRECTORY)
