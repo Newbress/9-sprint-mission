@@ -82,7 +82,8 @@ public class FileChannelRepository implements ChannelRepository {
                             throw new RuntimeException(e);
                         }
                     })
-                    .filter(channel -> channel.getUserId() == userId)
+                    .filter(channel -> channel.getType()== ChannelType.PUBLIC ||
+                            channel.getUserId() != null && channel.getUserId().equals(userId))
                     .toList();
         } catch (IOException e) {
             throw new RuntimeException(e);

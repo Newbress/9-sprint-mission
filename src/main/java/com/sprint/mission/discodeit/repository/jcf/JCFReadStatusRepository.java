@@ -52,7 +52,7 @@ public class JCFReadStatusRepository implements ReadStatusRepository {
     @Override
     public Optional<ReadStatus> findUserIdByChannelId(UUID channelId) {
         return this.data.values().stream()
-                .filter(readStatus -> readStatus.getChanelId().equals(channelId))
+                .filter(readStatus -> readStatus.getChannelId().equals(channelId))
                 .max(Comparator.comparing(ReadStatus::getCreatedAt));
     }
 
@@ -64,7 +64,7 @@ public class JCFReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public void deleteAllByChannelId(UUID channelId) {
-        this.data.values().removeIf(readStatus -> readStatus.getChanelId().equals(channelId));
+        this.data.values().removeIf(readStatus -> readStatus.getChannelId().equals(channelId));
     }
 
     @Override

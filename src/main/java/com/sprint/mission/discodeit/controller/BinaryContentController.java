@@ -18,9 +18,9 @@ import java.util.UUID;
 public class BinaryContentController {
     private final BinaryContentService binaryContentService;
 
-    @RequestMapping(value = "/api/binary", method = RequestMethod.GET)
-    public ResponseEntity<List<BinaryContent>> findBinaryContent(@PathVariable UUID binaryContentId) {
-        List<BinaryContent> findBinaryContent = binaryContentService.findAll(binaryContentId);
+    @RequestMapping(value = "/api/BinaryContent/find/{id}", method = RequestMethod.GET)
+    public ResponseEntity<List<BinaryContent>> findBinaryContent(@PathVariable UUID id) {
+        List<BinaryContent> findBinaryContent = binaryContentService.findAll(id);
         return ResponseEntity.ok(findBinaryContent);
     }
 }

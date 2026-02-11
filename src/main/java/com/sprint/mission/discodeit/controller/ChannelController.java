@@ -37,9 +37,9 @@ public class ChannelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(channel);
     }
 
-    @RequestMapping(value = "/api/channel/{id}", method = RequestMethod.PATCH)
-    public ResponseEntity<ChannelFindDTO> updatePublicChannel(@PathVariable UUID id, @RequestBody ChannelUpdateDTO dto){
-        ChannelFindDTO channel = channelService.updateDTO(id, dto);
+    @RequestMapping(value = "/api/channel/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Channel> updatePublicChannel(@PathVariable UUID id, @RequestBody ChannelUpdateDTO dto){
+        Channel channel = channelService.updateDTO(id, dto);
         return ResponseEntity.ok(channel);
     }
 
@@ -49,7 +49,7 @@ public class ChannelController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping(value = "/api/users/{userId}/channel", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/channel/{userId}", method = RequestMethod.GET)
     public ResponseEntity<List<Channel>> findChannelByUserId(@PathVariable UUID userId) {
         List<Channel> channel = channelService.findChannelByUserID(userId);
         return ResponseEntity.ok(channel);

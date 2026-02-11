@@ -47,22 +47,20 @@ public class BasicReadStatusService implements ReadStatusService {
 
     @Override
     public List<ReadStatus> findAllByUserId(UUID userId) {
-        if(userRepository.existsById(userId)){
+        if(!userRepository.existsById(userId)){
             throw new NoSuchElementException("User not found with id " + userId + " not found");
         }
         return readStatusRepository.findAll();
     }
 
     @Override
-    public ReadStatusResponseDTO updateDTO(UUID id, ReadStatusUpdateDTO dto) {
+    public ReadStatus updateDTO(UUID id, ReadStatusUpdateDTO dto) {
         ReadStatus readStatus = readStatusRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("id not found " + id));
         readStatus.update(dto.lastRead());
         readStatusRepository.save(readStatus);
 
-        return new ReadStatusResponseDTO(
-                readStatus.getLastRead()
-        );
+        return readStatus;
     }
 
     @Override

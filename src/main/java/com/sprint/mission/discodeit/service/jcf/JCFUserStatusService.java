@@ -34,12 +34,12 @@ public class JCFUserStatusService implements UserStatusService {
     }
 
     @Override
-    public UserStatusResponseDTO updateDTO(UUID id, UserStatusUpdateDTO dto) {
+    public UserStatus updateDTO(UUID id, UserStatusUpdateDTO dto) {
         return null;
     }
 
     @Override
-    public UserStatusResponseDTO updateByUserId(UUID userId, UserStatusUpdateDTO dto) {
+    public UserStatus updateByUserId(UUID userId, UserStatusUpdateDTO dto) {
         return null;
     }
 

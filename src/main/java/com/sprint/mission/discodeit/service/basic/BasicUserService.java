@@ -42,7 +42,6 @@ public class BasicUserService implements UserService {
         }
 
         User user = new User(dto.username(), dto.email(), dto.password());
-        userRepository.save(user);
 
         if(dto.profileImage() != null){
             BinaryContent profile = new BinaryContent(
@@ -57,6 +56,7 @@ public class BasicUserService implements UserService {
 
         UserStatus userStatus = new UserStatus(user.getId(), Instant.now()); //생성시간
         userStatusRepository.save(userStatus);
+        userRepository.save(user);
         return user;
     }
 
@@ -116,7 +116,7 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public UserFindDTO updateDTO(UUID userId, UserUpdateDTO dto) {
+    public User updateDTO(UUID userId, UserUpdateDTO dto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
         user.update(dto.newUsername(), dto.newEmail(), dto.newPassword());
@@ -131,19 +131,8 @@ public class BasicUserService implements UserService {
             );
             binaryContentRepository.save(profile);
         }
-
         userRepository.save(user);
-
-        boolean isOnline = userStatusRepository.findId(userId)
-                .map(UserStatus::isOnline)
-                .orElse(false);
-
-        return  new UserFindDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                isOnline
-        );
+        return user;
     }
 
     @Override

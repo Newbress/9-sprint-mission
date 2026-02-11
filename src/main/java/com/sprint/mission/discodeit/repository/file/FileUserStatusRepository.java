@@ -65,17 +65,9 @@ public class FileUserStatusRepository implements UserStatusRepository {
 
     @Override
     public Optional<UserStatus> findByUserId(UUID userId) {
-        UserStatus userNullable = null;
-        Path path = resolvePath(userId);
-        if (Files.exists(path)) {
-            try (FileInputStream fis = new FileInputStream(path.toFile());
-                 ObjectInputStream ois = new ObjectInputStream(fis)) {
-                userNullable = (UserStatus) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return Optional.ofNullable(userNullable);
+        return findAll().stream()
+                .filter(userStatus -> userStatus.getUserId().equals(userId))
+                .findFirst();
     }
 
     @Override

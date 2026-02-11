@@ -44,7 +44,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
         } catch (IOException e){
             throw new RuntimeException(e);
         }
-        return null;
+        return readStatus;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
                             throw new RuntimeException(e);
                         }
                     })
-                    .filter(readStatus -> readStatus.getUserId() != null && readStatus.getChanelId().equals(channelId))
+                    .filter(readStatus -> readStatus.getUserId() != null && readStatus.getChannelId().equals(channelId))
                     .max(Comparator.comparing(ReadStatus::getCreatedAt));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -172,7 +172,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
                         try (FileInputStream fis = new FileInputStream(path.toFile());
                              ObjectInputStream ois = new ObjectInputStream(fis)) {
                             ReadStatus readStatus = (ReadStatus) ois.readObject();
-                            if (readStatus.getChanelId() !=null && readStatus.getChanelId().equals(channelId)) {
+                            if (readStatus.getChannelId() !=null && readStatus.getChannelId().equals(channelId)) {
                                 Files.delete(path);
                             }
                         } catch (IOException | ClassNotFoundException e) {
@@ -194,7 +194,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     public boolean existByUserIdAndChannelId(UUID userId, UUID channelId) {
         List<ReadStatus> all = findAll();
         for(ReadStatus rs : all)    {
-            if(rs.getUserId().equals(userId) && rs.getChanelId().equals(channelId)){
+            if(rs.getUserId().equals(userId) && rs.getChannelId().equals(channelId)){
                 return true;
             }
         }

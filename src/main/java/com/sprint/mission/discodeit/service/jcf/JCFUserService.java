@@ -95,7 +95,7 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public UserFindDTO updateDTO(UUID userId, UserUpdateDTO dto) {
+    public User updateDTO(UUID userId, UserUpdateDTO dto) {
         User userNullable = this.data.get(userId);
         User user = Optional.ofNullable(userNullable)
                 .orElseThrow(()-> new NoSuchElementException("User with id " + userId + " not found"));
@@ -112,15 +112,7 @@ public class JCFUserService implements UserService {
             binaryContentRepository.save(profile);
         }
 
-        boolean isOnline = userStatusRepository.findByUserId(userId)
-                .map(UserStatus::isOnline)
-                .orElse(false);
-        return new UserFindDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                isOnline
-        );
+        return user;
     }
 
     @Override

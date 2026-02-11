@@ -88,7 +88,13 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public List<Channel> findChannelByUserID(UUID userId) {
-        return channelRepository.findChannelByUserId(userId);
+        List<UUID> readStatus = readStatusRepository.findAllByUserId(userId).stream()
+                .map(ReadStatus::getChannelId)
+                .toList();
+        return channelRepository.findAll().stream()
+                .filter(channel -> channel.getType().equals(ChannelType.PUBLIC)
+                        || readStatus.contains(channel.getId()))
+                .toList();
         }
 
 
@@ -103,7 +109,7 @@ public class BasicChannelService implements ChannelService {
 
         List<ReadStatus> readStatus = readStatusRepository.findAllByUserId(userId);
         Set<UUID> privateChannelIds = readStatus.stream()
-                .map(ReadStatus::getChanelId)
+                .map(ReadStatus::getChannelId)
                 .collect(Collectors.toSet());
         List<Channel> privateChannel = channelRepository.findAllById(privateChannelIds);
 
@@ -142,7 +148,7 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
-    public ChannelFindDTO updateDTO(UUID id, ChannelUpdateDTO dto) {
+    public Channel updateDTO(UUID id, ChannelUpdateDTO dto) {
         Channel channel = channelRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Channel with id " + id + " not found"));
 
@@ -154,14 +160,7 @@ public class BasicChannelService implements ChannelService {
 
         channelRepository.save(channel);
         Optional<Message> lastMessageCreatedAt = messageRepository.findLastMessageByChannelId(id);
-        return new ChannelFindDTO(
-                channel.getId(),
-                null,
-                channel.getType(),
-                channel.getName(),
-                channel.getDescription(),
-                lastMessageCreatedAt
-        );
+        return channel;
     }
 
     @Override

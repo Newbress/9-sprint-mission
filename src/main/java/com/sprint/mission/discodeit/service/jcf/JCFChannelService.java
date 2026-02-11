@@ -100,7 +100,7 @@ public class JCFChannelService implements ChannelService {
 
         List<ReadStatus> readStatus = readStatusRepository.findAllByUserId(userId);
         Set<UUID> privateChannelIds = readStatus.stream()
-                .map(ReadStatus::getChanelId)
+                .map(ReadStatus::getChannelId)
                 .collect(Collectors.toSet());
         List<Channel> privateChannel = channelRepository.findAllById(privateChannelIds);
 
@@ -141,7 +141,7 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public ChannelFindDTO updateDTO(UUID id, ChannelUpdateDTO dto) {
+    public Channel updateDTO(UUID id, ChannelUpdateDTO dto) {
         return null;
     }
 

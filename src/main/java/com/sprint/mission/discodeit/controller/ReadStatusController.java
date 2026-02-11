@@ -20,22 +20,22 @@ import java.util.UUID;
 public class ReadStatusController {
     private final ReadStatusService readStatusService;
 
-    @RequestMapping(value = "/api/channel/{channelId}/readStatus", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/readStatus", method = RequestMethod.POST)
     public ResponseEntity<ReadStatus> createReadStatus(@RequestBody ReadStatusCreateDTO dto) {
         ReadStatus readStatus = readStatusService.createDTO(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(readStatus);
     }
 
-    @RequestMapping(value = "/api/channel/{channelId}/readStats", method = RequestMethod.PUT)
-    public ResponseEntity<ReadStatusResponseDTO> updateReadStatus(@PathVariable UUID channelId,@RequestBody ReadStatusUpdateDTO dto) {
-        ReadStatusResponseDTO readStatus = readStatusService.updateDTO(channelId, dto);
+    @RequestMapping(value = "/api/readStatus/{readStatusId}", method = RequestMethod.PUT)
+    public ResponseEntity<ReadStatus> updateReadStatus(@PathVariable UUID readStatusId,@RequestBody ReadStatusUpdateDTO dto) {
+        ReadStatus readStatus = readStatusService.updateDTO(readStatusId, dto);
         return ResponseEntity.ok(readStatus);
     }
 
-    @RequestMapping(value = "/api/users/{userId}/readStatus", method = RequestMethod.GET)
-    public ResponseEntity<List<ReadStatus>> findReadStatus(@PathVariable UUID userId) {
-        List<ReadStatus> readStatus = readStatusService.findAllByUserId(userId);
-        return ResponseEntity.ok(readStatus);
-    }
+        @RequestMapping(value = "/api/readStatus/{userId}", method = RequestMethod.GET)
+        public ResponseEntity<List<ReadStatus>> findReadStatus(@PathVariable UUID userId) {
+            List<ReadStatus> readStatus = readStatusService.findAllByUserId(userId);
+            return ResponseEntity.ok(readStatus);
+        }
 
 }

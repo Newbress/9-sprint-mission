@@ -44,27 +44,23 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    public UserStatusResponseDTO updateDTO(UUID id, UserStatusUpdateDTO dto) {
+    public UserStatus updateDTO(UUID id, UserStatusUpdateDTO dto) {
         UserStatus userStatus = userStatusRepository.findId(id)
                 .orElseThrow(() -> new NoSuchElementException("id not found " + id + " not found"));
         userStatus.update(dto.lastConnection());
         userStatusRepository.save(userStatus);
 
-        return new UserStatusResponseDTO(
-                userStatus.getLastConnection()
-        );
+        return userStatus;
     }
 
     @Override
-    public UserStatusResponseDTO updateByUserId(UUID userId, UserStatusUpdateDTO dto) {
-        UserStatus userStatus = userStatusRepository.findId(userId)
+    public UserStatus updateByUserId(UUID userId, UserStatusUpdateDTO dto) {
+        UserStatus userStatus = userStatusRepository.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("id not found " + userId + " not found"));
         userStatus.update(dto.lastConnection());
         userStatusRepository.save(userStatus);
 
-        return new UserStatusResponseDTO(
-                userStatus.getLastConnection()
-        );
+        return userStatus;
     }
 
     @Override

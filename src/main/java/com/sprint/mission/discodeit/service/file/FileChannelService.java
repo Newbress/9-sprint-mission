@@ -147,7 +147,7 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public ChannelFindDTO updateDTO(UUID id,ChannelUpdateDTO dto) {
+    public Channel updateDTO(UUID id,ChannelUpdateDTO dto) {
         return null;
     }
 

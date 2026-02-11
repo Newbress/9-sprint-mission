@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.entity.DTO.User.UserUpdateDTO;
 import com.sprint.mission.discodeit.entity.DTO.UserStatus.UserStatusResponseDTO;
 import com.sprint.mission.discodeit.entity.DTO.UserStatus.UserStatusUpdateDTO;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
 import lombok.RequiredArgsConstructor;
@@ -30,11 +31,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
-    @RequestMapping(value = "/api/users/{id}", method = RequestMethod.PATCH)
-    public ResponseEntity<UserFindDTO> updateUser(@PathVariable UUID id, @RequestBody UserUpdateDTO dto){
-        UserFindDTO user = userService.updateDTO(id, dto);
-        return ResponseEntity.ok(user);
-    }
+        @RequestMapping(value = "/api/users/{id}", method = RequestMethod.PUT)
+        public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody UserUpdateDTO dto){
+            User user = userService.updateDTO(id, dto);
+            return ResponseEntity.ok(user);
+        }
 
     @RequestMapping(value = "/api/users/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteUser(@PathVariable UUID id){
@@ -49,9 +50,9 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(value = "/api/users/{id}/userStatus", method = RequestMethod.PATCH)
-    public ResponseEntity<UserStatusResponseDTO> isOnline(@PathVariable UUID id, @RequestBody UserStatusUpdateDTO dto){
-        UserStatusResponseDTO user = userStatusService.updateDTO(id, dto);
+    @RequestMapping(value = "/api/users/{userId}/userStatus", method = RequestMethod.PUT)
+    public ResponseEntity<UserStatus> isOnline(@PathVariable UUID userId, @RequestBody UserStatusUpdateDTO dto){
+        UserStatus user = userStatusService.updateByUserId(userId, dto);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 }

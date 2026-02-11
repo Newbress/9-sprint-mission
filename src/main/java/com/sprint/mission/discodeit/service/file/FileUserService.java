@@ -146,7 +146,7 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public UserFindDTO updateDTO(UUID userId, UserUpdateDTO dto) {
+    public User updateDTO(UUID userId, UserUpdateDTO dto) {
         return null;
     }
 

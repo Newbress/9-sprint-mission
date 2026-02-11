@@ -16,7 +16,7 @@ public interface UserService {
     List<User> findAll();
     List<UserFindDTO> findAllDTO();
     User update(UUID userId, String newUsername, String newEmail, String newPassword);
-    UserFindDTO updateDTO(UUID userId, UserUpdateDTO dto);
+    User updateDTO(UUID userId, UserUpdateDTO dto);
     void delete(UUID userId);
 
 }

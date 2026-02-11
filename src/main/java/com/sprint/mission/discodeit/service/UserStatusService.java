@@ -12,7 +12,7 @@ public interface UserStatusService {
     UserStatus createDTO(UserStatusCreateDTO dto);
     UserStatus find(UUID id);
     List<UserStatus> findAll();
-    UserStatusResponseDTO updateDTO(UUID id,UserStatusUpdateDTO dto);
-    UserStatusResponseDTO updateByUserId(UUID userId, UserStatusUpdateDTO dto);
+    UserStatus updateDTO(UUID id,UserStatusUpdateDTO dto);
+    UserStatus updateByUserId(UUID userId, UserStatusUpdateDTO dto);
     void delete(UUID id);
 }

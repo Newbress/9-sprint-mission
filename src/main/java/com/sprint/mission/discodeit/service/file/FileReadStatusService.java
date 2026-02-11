@@ -28,7 +28,7 @@ public class FileReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public ReadStatusResponseDTO updateDTO(UUID id, ReadStatusUpdateDTO dto) {
+    public ReadStatus updateDTO(UUID id, ReadStatusUpdateDTO dto) {
         return null;
     }
 
