@@ -3,7 +3,6 @@ package com.sprint.mission.discodeit.controller;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelCreateDTO;
 import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelCreatePrivateDTO;
-import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelFindDTO;
 import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelUpdateDTO;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.UserService;

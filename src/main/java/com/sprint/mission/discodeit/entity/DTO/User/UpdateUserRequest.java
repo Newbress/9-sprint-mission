@@ -2,10 +2,12 @@ package com.sprint.mission.discodeit.entity.DTO.User;
 
 import com.sprint.mission.discodeit.entity.DTO.BinaryContent.ProfileImageDTO;
 
-public record UserUpdateDTO(
+import java.util.UUID;
+
+public record UpdateUserRequest(
         String newUsername,
         String newEmail,
         String newPassword,
-        ProfileImageDTO profileImage
+        UUID profileImage
 ) {
 }

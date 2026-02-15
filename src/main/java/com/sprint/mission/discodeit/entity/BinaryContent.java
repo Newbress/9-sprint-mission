@@ -10,19 +10,17 @@ import java.util.UUID;
 public class BinaryContent implements Serializable {
     private static final long serialVersionUID = 1L;
     private final UUID id; // binary파일들의 아이디
-    private final UUID userId; //
-    private final UUID messageId;
-    private byte[] content;
+    private String fileName;
+    private byte[] bytes;
     private String contentType;
-    private Instant createdAt;
+    private final Instant createdAt;
 
 
 
-    public BinaryContent(UUID id, UUID userId, UUID messageId, byte[] content, String contentType) {
-        this.id = id;
-        this.userId = userId;
-        this.messageId = messageId;
-        this.content = content;
+    public BinaryContent(String fileName, String contentType, byte[] data) {
+        this.id = UUID.randomUUID();
+        this.fileName = fileName;
+        this.bytes = data;
         this.contentType = contentType;
         Instant now = Instant.now();
         this.createdAt = now;

@@ -127,45 +127,4 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
 
     }
 
-    @Override
-    public void deleteAllByUserId(UUID userId) {
-        try{
-            Files.list(DIRECTORY)
-                    .filter(path -> path.toString().endsWith(EXTENSION))
-                    .forEach(path -> {
-                        try (FileInputStream fis = new FileInputStream(path.toFile());
-                             ObjectInputStream ois = new ObjectInputStream(fis)) {
-                            BinaryContent binaryContent = (BinaryContent) ois.readObject();
-                            if (binaryContent.getUserId().equals(userId)) {
-                                Files.delete(path);
-                            }
-                        } catch (IOException | ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        }catch (IOException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void deleteAllByMessageId(UUID messageId) {
-        try{
-            Files.list(DIRECTORY)
-                    .filter(path -> path.toString().endsWith(EXTENSION))
-                    .forEach(path -> {
-                        try (FileInputStream fis = new FileInputStream(path.toFile());
-                             ObjectInputStream ois = new ObjectInputStream(fis)) {
-                            BinaryContent binaryContent = (BinaryContent) ois.readObject();
-                            if (binaryContent.getMessageId().equals(messageId)) {
-                                Files.delete(path);
-                            }
-                        } catch (IOException | ClassNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-        }catch (IOException e){
-            throw new RuntimeException(e);
-        }
-    }
 }

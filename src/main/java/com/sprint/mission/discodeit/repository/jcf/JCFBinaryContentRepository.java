@@ -51,13 +51,13 @@ public class JCFBinaryContentRepository implements BinaryContentRepository {
         this.data.remove(id);
     }
 
-    @Override
-    public void deleteAllByUserId(UUID userId) {
-        this.data.remove(userId);
-    }
-
-    @Override
-    public void deleteAllByMessageId(UUID messageId) {
-        this.data.remove(messageId);
-    }
+//    @Override
+//    public void deleteAllByUserId(UUID userId) {
+//        this.data.remove(userId);
+//    }
+//
+//    @Override
+//    public void deleteAllByMessageId(UUID messageId) {
+//        this.data.remove(messageId);
+//    }
 }

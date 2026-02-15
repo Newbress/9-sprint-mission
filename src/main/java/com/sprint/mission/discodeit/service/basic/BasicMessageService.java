@@ -55,11 +55,9 @@ public class BasicMessageService implements MessageService {
         if(dto.attachedFiles() != null && !dto.attachedFiles().isEmpty()) {
             for(AttachedFilesDTO attachedFilesDTO : dto.attachedFiles()){
                 BinaryContent files = new BinaryContent(
-                        UUID.randomUUID(),
                         null,
-                        message.getId(),
-                        attachedFilesDTO.content(),
-                        attachedFilesDTO.contentType()
+                        attachedFilesDTO.contentType(),
+                        attachedFilesDTO.bytes()
                 );
                 binaryContentRepository.save(files);
             }
@@ -104,11 +102,9 @@ public class BasicMessageService implements MessageService {
         if(dto.attachedFiles() != null && !dto.attachedFiles().isEmpty()) {
             for(AttachedFilesDTO attachedFilesDTO : dto.attachedFiles()){
                 BinaryContent content = new BinaryContent(
-                        UUID.randomUUID(),
                         null,
-                        message.getId(),
-                        attachedFilesDTO.content(),
-                        attachedFilesDTO.contentType()
+                        attachedFilesDTO.contentType(),
+                        attachedFilesDTO.bytes()
                 );
                 binaryContentRepository.save(content);
             }
@@ -118,10 +114,12 @@ public class BasicMessageService implements MessageService {
 
     @Override
     public void delete(UUID id) {
-        if (!messageRepository.existsById(id)) {
-            throw new NoSuchElementException("Message with id " + id + " not found");
-        }
-        binaryContentRepository.deleteAllByMessageId(id);
+        Message message = messageRepository.findById(id)
+                .orElseThrow(
+                        () -> new NoSuchElementException("Message with id " + id + " not found"));
+
+        message.getAttachmentIds()
+                .forEach(binaryContentRepository::deleteById);
         messageRepository.deleteById(id);
     }
 }
