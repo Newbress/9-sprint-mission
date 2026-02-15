@@ -1,9 +1,7 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.entity.BinaryContent;
-import com.sprint.mission.discodeit.entity.DTO.BinaryContent.CreateBinaryContentRequest;
 import com.sprint.mission.discodeit.entity.DTO.User.CreateUserRequest;
-import com.sprint.mission.discodeit.entity.DTO.User.ResponesUser;
+import com.sprint.mission.discodeit.entity.DTO.User.ResponseUser;
 import com.sprint.mission.discodeit.entity.DTO.User.UpdateUserRequest;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
@@ -50,7 +48,7 @@ public class BasicUserService implements UserService {
 
 
     @Override
-    public ResponesUser find(UUID userId) {
+    public ResponseUser find(UUID userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NoSuchElementException("User with id" + userId + "not found"));
 
@@ -58,7 +56,7 @@ public class BasicUserService implements UserService {
                 .map(UserStatus::isOnline)
                 .orElse(false);
 
-        return new ResponesUser(
+        return new ResponseUser(
                 user.getId(),
                 user.getCreatedAt(),
                 user.getUpdatedAt(),
@@ -71,7 +69,7 @@ public class BasicUserService implements UserService {
 
 
     @Override
-    public List<ResponesUser> findAll() {
+    public List<ResponseUser> findAll() {
         List<User> users = userRepository.findAll();
         return users.stream()
                 .map(user -> {
@@ -79,7 +77,7 @@ public class BasicUserService implements UserService {
                             .map(UserStatus::isOnline)
                             .orElse(false);
 
-                    return new ResponesUser(
+                    return new ResponseUser(
                             user.getId(),
                             user.getCreatedAt(),
                             user.getUpdatedAt(),

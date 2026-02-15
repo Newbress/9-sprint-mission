@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.entity.DTO.User.AuthDTO;
+import com.sprint.mission.discodeit.entity.DTO.User.LoginRequest;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.AuthService;
@@ -12,10 +12,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class BasicAuthService implements AuthService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public User login(AuthDTO dto) {
+    public User login(LoginRequest dto) {
         Optional<User> userOptional = userRepository.findByUsername(dto.username());
         if(userOptional.isEmpty()) {
             throw new RuntimeException("유저이름이 없어요라");

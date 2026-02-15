@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.controller;
 
 
-import com.sprint.mission.discodeit.entity.DTO.ReadStatus.ReadStatusCreateDTO;
-import com.sprint.mission.discodeit.entity.DTO.ReadStatus.ReadStatusUpdateDTO;
+import com.sprint.mission.discodeit.entity.DTO.ReadStatus.CreateReadStatusRequest;
+import com.sprint.mission.discodeit.entity.DTO.ReadStatus.UpdateReadStatusRequest;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.service.ReadStatusService;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ public class ReadStatusController {
     private final ReadStatusService readStatusService;
 
     @RequestMapping(value = "/api/readStatus", method = RequestMethod.POST)
-    public ResponseEntity<ReadStatus> createReadStatus(@RequestBody ReadStatusCreateDTO dto) {
-        ReadStatus readStatus = readStatusService.createDTO(dto);
+    public ResponseEntity<ReadStatus> createReadStatus(@RequestBody CreateReadStatusRequest request) {
+        ReadStatus readStatus = readStatusService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(readStatus);
     }
 
     @RequestMapping(value = "/api/readStatus/{readStatusId}", method = RequestMethod.PUT)
-    public ResponseEntity<ReadStatus> updateReadStatus(@PathVariable UUID readStatusId,@RequestBody ReadStatusUpdateDTO dto) {
-        ReadStatus readStatus = readStatusService.updateDTO(readStatusId, dto);
+    public ResponseEntity<ReadStatus> updateReadStatus(@PathVariable UUID readStatusId,@RequestBody UpdateReadStatusRequest request) {
+        ReadStatus readStatus = readStatusService.update(readStatusId, request);
         return ResponseEntity.ok(readStatus);
     }
 

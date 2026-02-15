@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public record ChannelFindDTO(
+public record ResponseChannel(
         UUID id,
         List<UUID> userIds,
         ChannelType type,

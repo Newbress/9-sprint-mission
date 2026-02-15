@@ -4,7 +4,7 @@ package com.sprint.mission.discodeit.entity.DTO.User;
 import java.time.Instant;
 import java.util.UUID;
 
-public record ResponesUser(
+public record ResponseUser(
         UUID id,
         Instant createdAt,
         Instant updatedAt,

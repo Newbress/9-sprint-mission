@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.entity.DTO.BinaryContent;
 
-public record ProfileImageDTO(
+public record ProfileImage(
         String contentType,
         byte[] data
 ) {

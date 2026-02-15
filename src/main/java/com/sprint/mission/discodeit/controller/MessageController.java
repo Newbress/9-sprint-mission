@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.controller;
 
 
-import com.sprint.mission.discodeit.entity.DTO.Message.MessageCreateDTO;
-import com.sprint.mission.discodeit.entity.DTO.Message.MessageUpdateDTO;
+import com.sprint.mission.discodeit.entity.DTO.Message.CreateMessageRequest;
+import com.sprint.mission.discodeit.entity.DTO.Message.UpdateMessageRequest;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ public class MessageController {
     private final MessageService messageService;
 
     @RequestMapping(value = "/api/message", method = RequestMethod.POST)
-    public ResponseEntity<Message> createMessage(@RequestBody MessageCreateDTO dto) {
-        Message message = messageService.createDTO(dto);
+    public ResponseEntity<Message> createMessage(@RequestBody CreateMessageRequest request) {
+        Message message = messageService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
     @RequestMapping(value = "/api/message/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Message> updateMessage(@PathVariable UUID id, @RequestBody MessageUpdateDTO dto){
-        Message message = messageService.updateDTO(id, dto);
+    public ResponseEntity<Message> updateMessage(@PathVariable UUID id, @RequestBody UpdateMessageRequest request){
+        Message message = messageService.update(id, request);
         return ResponseEntity.ok(message);
     }
 

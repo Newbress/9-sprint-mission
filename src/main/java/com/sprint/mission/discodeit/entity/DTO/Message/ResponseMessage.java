@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.entity.DTO.Message;
 
 import java.util.UUID;
 
-public record MessageFindDTO(
+public record ResponseMessage(
         UUID id
 
 ) {}

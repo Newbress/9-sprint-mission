@@ -1,11 +1,10 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
-import com.sprint.mission.discodeit.entity.DTO.BinaryContent.CreateBinaryContentRequest;
 import com.sprint.mission.discodeit.entity.DTO.User.CreateUserRequest;
-import com.sprint.mission.discodeit.entity.DTO.User.ResponesUser;
+import com.sprint.mission.discodeit.entity.DTO.User.ResponseUser;
 import com.sprint.mission.discodeit.entity.DTO.User.UpdateUserRequest;
-import com.sprint.mission.discodeit.entity.DTO.UserStatus.UserStatusUpdateDTO;
+import com.sprint.mission.discodeit.entity.DTO.UserStatus.UpdateUserStatusRequest;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.service.BinaryContentService;
@@ -18,9 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -61,13 +58,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/users/findAll",    method = RequestMethod.GET)
-    public ResponseEntity<List<ResponesUser>> findUserAll(){
-        List<ResponesUser> users = userService.findAll();
+    public ResponseEntity<List<ResponseUser>> findUserAll(){
+        List<ResponseUser> users = userService.findAll();
         return ResponseEntity.ok(users);
     }
 
     @RequestMapping(value = "/api/users/{userId}/userStatus", method = RequestMethod.PUT)
-    public ResponseEntity<UserStatus> isOnline(@PathVariable UUID userId, @RequestBody UserStatusUpdateDTO dto){
+    public ResponseEntity<UserStatus> isOnline(@PathVariable UUID userId, @RequestBody UpdateUserStatusRequest dto){
         UserStatus user = userStatusService.updateByUserId(userId, dto);
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }

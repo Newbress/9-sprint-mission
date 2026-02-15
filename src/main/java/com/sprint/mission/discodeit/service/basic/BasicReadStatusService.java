@@ -1,8 +1,7 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.entity.DTO.ReadStatus.ReadStatusCreateDTO;
-import com.sprint.mission.discodeit.entity.DTO.ReadStatus.ReadStatusResponseDTO;
-import com.sprint.mission.discodeit.entity.DTO.ReadStatus.ReadStatusUpdateDTO;
+import com.sprint.mission.discodeit.entity.DTO.ReadStatus.CreateReadStatusRequest;
+import com.sprint.mission.discodeit.entity.DTO.ReadStatus.UpdateReadStatusRequest;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
@@ -23,17 +22,17 @@ public class BasicReadStatusService implements ReadStatusService {
     private final ChannelRepository channelRepository;
 
     @Override
-    public ReadStatus createDTO(ReadStatusCreateDTO dto) {
-        if(dto.userId() == null || !userRepository.existsById(dto.userId())){
+    public ReadStatus create(CreateReadStatusRequest request) {
+        if(request.userId() == null || !userRepository.existsById(request.userId())){
             throw new IllegalArgumentException("존재하지 않거나 이미 존재하는 아이디입니다.");
         }
-        if(dto.channelId() == null || !channelRepository.existsById(dto.channelId())){
+        if(request.channelId() == null || !channelRepository.existsById(request.channelId())){
             throw new IllegalArgumentException("존재하지 않거나 이미 존재하는 채널입니다.");
         }
-        if(readStatusRepository.existByUserIdAndChannelId(dto.userId(), dto.channelId())){
+        if(readStatusRepository.existByUserIdAndChannelId(request.userId(), request.channelId())){
             throw new IllegalArgumentException("이미 존재합니다.");
         }
-        ReadStatus readStatus = new ReadStatus(dto.userId(), dto.channelId(), dto.lastRead());
+        ReadStatus readStatus = new ReadStatus(request.userId(), request.channelId(), request.lastRead());
         return readStatusRepository.save(readStatus);
     }
 
@@ -54,10 +53,10 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public ReadStatus updateDTO(UUID id, ReadStatusUpdateDTO dto) {
+    public ReadStatus update(UUID id, UpdateReadStatusRequest request) {
         ReadStatus readStatus = readStatusRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("id not found " + id));
-        readStatus.update(dto.lastRead());
+        readStatus.update(request.lastRead());
         readStatusRepository.save(readStatus);
 
         return readStatus;

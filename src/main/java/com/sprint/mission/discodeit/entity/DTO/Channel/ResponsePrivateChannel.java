@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public record ChannelFindPrivateDTO(
+public record ResponsePrivateChannel(
         UUID id,
         List<UUID> userIds,
         String name,

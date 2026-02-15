@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.entity.DTO.Channel;
 
-public record ChannelCreateDTO(
+public record CreateChannelRequest(
         String name,
         String description
 ) {

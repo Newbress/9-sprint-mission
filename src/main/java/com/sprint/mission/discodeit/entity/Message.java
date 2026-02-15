@@ -14,9 +14,7 @@ public class Message implements Serializable {
     private UUID id;
     private Instant createdAt;
     private Instant updatedAt;
-    //
     private String content;
-    //
     private UUID channelId;
     private UUID userId;
     private List<UUID> attachmentIds;
@@ -25,7 +23,6 @@ public class Message implements Serializable {
         this.id = UUID.randomUUID();
         Instant now = Instant.now();
         this.createdAt = now;
-        //
         this.content = content;
         this.channelId = channelId;
         this.userId = userId;
