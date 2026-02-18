@@ -20,4 +20,5 @@ public class AuthController {
         User userLogin = authService.login(dto);
         return ResponseEntity.ok(userLogin);
     }
+
 }
