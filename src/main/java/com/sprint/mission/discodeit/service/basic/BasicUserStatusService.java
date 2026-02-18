@@ -1,8 +1,7 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.entity.DTO.UserStatus.UserStatusCreateDTO;
-import com.sprint.mission.discodeit.entity.DTO.UserStatus.UserStatusResponseDTO;
-import com.sprint.mission.discodeit.entity.DTO.UserStatus.UserStatusUpdateDTO;
+import com.sprint.mission.discodeit.entity.DTO.UserStatus.CreateUserStatusRequest;
+import com.sprint.mission.discodeit.entity.DTO.UserStatus.UpdateUserStatusRequest;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
@@ -21,14 +20,14 @@ public class BasicUserStatusService implements UserStatusService {
     private final UserRepository userRepository;
 
     @Override
-    public UserStatus createDTO(UserStatusCreateDTO dto) {
-        if(!userRepository.existsById(dto.userId())){
+    public UserStatus create(CreateUserStatusRequest request) {
+        if(!userRepository.existsById(request.userId())){
             throw new IllegalArgumentException("존재하지 않은 사용자입니다");
         }
-        if(userStatusRepository.existsByIdAndUserId(dto.id(), dto.userId())){
+        if(userStatusRepository.existsByIdAndUserId(request.id(), request.userId())){
             throw new IllegalArgumentException("이미 존재합니다.");
         }
-        UserStatus userStatus = new UserStatus(dto.userId(), dto.lastConnection());
+        UserStatus userStatus = new UserStatus(request.userId(), request.lastConnection());
         return userStatusRepository.save(userStatus);
     }
 
@@ -44,27 +43,23 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    public UserStatusResponseDTO updateDTO(UUID id, UserStatusUpdateDTO dto) {
+    public UserStatus update(UUID id, UpdateUserStatusRequest request) {
         UserStatus userStatus = userStatusRepository.findId(id)
                 .orElseThrow(() -> new NoSuchElementException("id not found " + id + " not found"));
-        userStatus.update(dto.lastConnection());
+        userStatus.update(request.lastConnection());
         userStatusRepository.save(userStatus);
 
-        return new UserStatusResponseDTO(
-                userStatus.getLastConnection()
-        );
+        return userStatus;
     }
 
     @Override
-    public UserStatusResponseDTO updateByUserId(UUID userId, UserStatusUpdateDTO dto) {
-        UserStatus userStatus = userStatusRepository.findId(userId)
+    public UserStatus updateByUserId(UUID userId, UpdateUserStatusRequest request) {
+        UserStatus userStatus = userStatusRepository.findByUserId(userId)
                 .orElseThrow(() -> new NoSuchElementException("id not found " + userId + " not found"));
-        userStatus.update(dto.lastConnection());
+        userStatus.update(request.lastConnection());
         userStatusRepository.save(userStatus);
 
-        return new UserStatusResponseDTO(
-                userStatus.getLastConnection()
-        );
+        return userStatus;
     }
 
     @Override

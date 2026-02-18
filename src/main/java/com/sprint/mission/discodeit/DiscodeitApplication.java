@@ -1,19 +1,5 @@
 package com.sprint.mission.discodeit;
 
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.ChannelType;
-import com.sprint.mission.discodeit.entity.DTO.BinaryContent.AttachedFilesDTO;
-import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelCreateDTO;
-import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelCreatePrivateDTO;
-import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelFindDTO;
-import com.sprint.mission.discodeit.entity.DTO.Channel.ChannelUpdateDTO;
-import com.sprint.mission.discodeit.entity.DTO.Message.MessageCreateDTO;
-import com.sprint.mission.discodeit.entity.DTO.Message.MessageUpdateDTO;
-import com.sprint.mission.discodeit.entity.DTO.User.UserCreateDTO;
-import com.sprint.mission.discodeit.entity.DTO.User.UserFindDTO;
-import com.sprint.mission.discodeit.entity.DTO.User.UserUpdateDTO;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.*;
 import com.sprint.mission.discodeit.repository.file.*;
 import com.sprint.mission.discodeit.service.ChannelService;
@@ -25,8 +11,6 @@ import com.sprint.mission.discodeit.service.basic.BasicUserService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import java.util.List;
-import java.util.UUID;
 
 
 @SpringBootApplication

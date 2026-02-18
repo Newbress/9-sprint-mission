@@ -6,6 +6,5 @@ server:
 
 discodeit:
   repository:
-    type:file
+    type: file
   file-directory: .discodeit
-

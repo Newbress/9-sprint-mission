@@ -18,20 +18,15 @@ public class User implements Serializable {
     private String username;
     private String email;
     private String password;
-    private UUID profiledId;
-    private MultipartFile profile;
+    private UUID profileId;
 
     public User(String username, String email, String password) {
         this.id = UUID.randomUUID();
         Instant now = Instant.now();
         this.createdAt = now;
-        //
         this.username = username;
         this.email = email;
         this.password = password;
-        //
-        this.profiledId = UUID.randomUUID();
-        this.profile = profile;
     }
 
     public void update(String newUsername, String newEmail, String newPassword) {
@@ -52,5 +47,9 @@ public class User implements Serializable {
         if (anyValueUpdated) {
             this.updatedAt = Instant.now();
         }
+    }
+
+    public void updateProfile(UUID profileId) {
+        this.profileId = profileId;
     }
 }

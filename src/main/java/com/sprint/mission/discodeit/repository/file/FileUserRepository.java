@@ -124,7 +124,7 @@ public class FileUserRepository implements UserRepository {
             try (FileInputStream fis = new FileInputStream(file);
                  ObjectInputStream ois = new ObjectInputStream(fis)) {
                 User user = (User) ois.readObject();
-                if (user.getUsername().equals(username)) {
+                if (username.equals(user.getUsername())) {
                     return true;
                 }
             } catch (IOException | ClassNotFoundException e) {
