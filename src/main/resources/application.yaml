@@ -11,3 +11,8 @@ discodeit:
   repository:
     type: file   # jcf | file
     file-directory: .discodeit
+
+springdoc:
+  servers:
+    - url: http://localhost:8080
+      description: 로컬 서버

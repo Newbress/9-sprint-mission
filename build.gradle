@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.sprint.mission'
 version = '0.0.1-SNAPSHOT'
-//
+// railway에서 오류 발생하여 주석처리
 //java {
 //    toolchain {
 //        languageVersion = JavaLanguageVersion.of(17)
