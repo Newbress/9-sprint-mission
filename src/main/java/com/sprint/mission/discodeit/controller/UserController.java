@@ -9,6 +9,8 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,19 +24,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Tag(name = "User",
+    description = "User API")
+@RestController
 @RequiredArgsConstructor
-@Controller
-@ResponseBody
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
   private final UserService userService;
   private final UserStatusService userStatusService;
 
-  @RequestMapping(
-      path = "create",
-      consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
-  )
+  @Operation(summary = "User 등록", operationId = "create")
+  @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<User> create(
       @RequestPart("userCreateRequest") UserCreateRequest userCreateRequest,
       @RequestPart(value = "profile", required = false) MultipartFile profile
@@ -47,12 +48,10 @@ public class UserController {
         .body(createdUser);
   }
 
-  @RequestMapping(
-      path = "update",
-      consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}
-  )
+  @Operation(summary = "User 정보 수정", operationId = "update")
+  @PatchMapping(path = "{userId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<User> update(
-      @RequestParam("userId") UUID userId,
+      @PathVariable("userId") UUID userId,
       @RequestPart("userUpdateRequest") UserUpdateRequest userUpdateRequest,
       @RequestPart(value = "profile", required = false) MultipartFile profile
   ) {
@@ -64,15 +63,17 @@ public class UserController {
         .body(updatedUser);
   }
 
-  @RequestMapping(path = "delete")
-  public ResponseEntity<Void> delete(@RequestParam("userId") UUID userId) {
+  @Operation(summary = "User 삭제", operationId = "delete")
+  @DeleteMapping(path = "{userId}")
+  public ResponseEntity<Void> delete(@PathVariable("userId") UUID userId) {
     userService.delete(userId);
     return ResponseEntity
         .status(HttpStatus.NO_CONTENT)
         .build();
   }
 
-  @RequestMapping(path = "findAll")
+  @Operation(summary = "전체 User 목록 조회", operationId = "findAll")
+  @GetMapping
   public ResponseEntity<List<UserDto>> findAll() {
     List<UserDto> users = userService.findAll();
     return ResponseEntity
@@ -80,8 +81,10 @@ public class UserController {
         .body(users);
   }
 
-  @RequestMapping(path = "updateUserStatusByUserId")
-  public ResponseEntity<UserStatus> updateUserStatusByUserId(@RequestParam("userId") UUID userId,
+  @Operation(summary = "User 온라인 상태 업데이트", operationId = "updateUserStatusByUserId")
+  @PatchMapping(path = "{userId}/userStatus")
+  public ResponseEntity<UserStatus> updateUserStatusByUserId(
+      @PathVariable("userId") UUID userId,
       @RequestBody UserStatusUpdateRequest request) {
     UserStatus updatedUserStatus = userStatusService.updateByUserId(userId, request);
     return ResponseEntity

@@ -5,6 +5,8 @@ import com.sprint.mission.discodeit.dto.request.MessageCreateRequest;
 import com.sprint.mission.discodeit.dto.request.MessageUpdateRequest;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.MessageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,18 +21,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Tag(name = "Message",
+    description = "Message api")
+@RequestMapping("/api/messages")
+@RestController
 @RequiredArgsConstructor
-@Controller
-@ResponseBody
-@RequestMapping("/api/message")
 public class MessageController {
 
   private final MessageService messageService;
 
-  @RequestMapping(
-      path = "create",
-      consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-  )
+  @Operation(summary = "Message 생성", operationId = "create_2")
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Message> create(
       @RequestPart("messageCreateRequest") MessageCreateRequest messageCreateRequest,
       @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments
@@ -56,8 +57,9 @@ public class MessageController {
         .body(createdMessage);
   }
 
-  @RequestMapping(path = "update")
-  public ResponseEntity<Message> update(@RequestParam("messageId") UUID messageId,
+  @Operation(summary = "Message 내용 수정", operationId = "update_2")
+  @PatchMapping(path = "{messageId}")
+  public ResponseEntity<Message> update(@PathVariable("messageId") UUID messageId,
       @RequestBody MessageUpdateRequest request) {
     Message updatedMessage = messageService.update(messageId, request);
     return ResponseEntity
@@ -65,15 +67,17 @@ public class MessageController {
         .body(updatedMessage);
   }
 
-  @RequestMapping(path = "delete")
-  public ResponseEntity<Void> delete(@RequestParam("messageId") UUID messageId) {
+  @Operation(summary = "Message 삭제", operationId = "delete")
+  @DeleteMapping(path = "{messageId}")
+  public ResponseEntity<Void> delete(@PathVariable("messageId") UUID messageId) {
     messageService.delete(messageId);
     return ResponseEntity
         .status(HttpStatus.NO_CONTENT)
         .build();
   }
 
-  @RequestMapping("findAllByChannelId")
+  @Operation(summary = "Channel의 Message 목록 조회", operationId = "findAllByChannelId")
+  @GetMapping
   public ResponseEntity<List<Message>> findAllByChannelId(
       @RequestParam("channelId") UUID channelId) {
     List<Message> messages = messageService.findAllByChannelId(channelId);
