@@ -1,68 +1,56 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
 import java.util.UUID;
 
+@Getter
 public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
 
-    private final UUID id;
-    private final Long createdAt;
-    private Long updatedAt;
-    private String userName;
-    private String email;
-    private String phone;
+  private static final long serialVersionUID = 1L;
 
-    public User(String username, String email, String phone) {
-        this.id = UUID.randomUUID();
-        long now = System.currentTimeMillis();
-        this.createdAt = now;
-        this.updatedAt = now;
-        this.userName = username;
-        this.email = email;
-        this.phone = phone;
+  private UUID id;
+  private Instant createdAt;
+  private Instant updatedAt;
+  //
+  private String username;
+  private String email;
+  private String password;
+  private UUID profileId;     // BinaryContent
+
+  public User(String username, String email, String password, UUID profileId) {
+    this.id = UUID.randomUUID();
+    this.createdAt = Instant.now();
+    //
+    this.username = username;
+    this.email = email;
+    this.password = password;
+    this.profileId = profileId;
+  }
+
+  public void update(String newUsername, String newEmail, String newPassword, UUID newProfileId) {
+    boolean anyValueUpdated = false;
+    if (newUsername != null && !newUsername.equals(this.username)) {
+      this.username = newUsername;
+      anyValueUpdated = true;
+    }
+    if (newEmail != null && !newEmail.equals(this.email)) {
+      this.email = newEmail;
+      anyValueUpdated = true;
+    }
+    if (newPassword != null && !newPassword.equals(this.password)) {
+      this.password = newPassword;
+      anyValueUpdated = true;
+    }
+    if (newProfileId != null && !newProfileId.equals(this.profileId)) {
+      this.profileId = newProfileId;
+      anyValueUpdated = true;
     }
 
-    public UUID getId() {
-        return id;
+    if (anyValueUpdated) {
+      this.updatedAt = Instant.now();
     }
-
-    public String getCreatedAt() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(this.createdAt));
-    }
-
-    public String getUpdatedAt() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(this.updatedAt));
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void update(String newUsername, String newEmail, String newPhone) {
-        this.userName = newUsername;
-        this.email = newEmail;
-        this.phone = newPhone;
-    }
-
-    @Override
-    public String toString() {
-        return "유저: " + userName + "\n" +
-                "이메일: " + email + "\n" +
-                "전화번호: " + phone  + "\n" +
-                "UserID: " + id;
-    }
-
+  }
 }

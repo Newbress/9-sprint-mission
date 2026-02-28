@@ -1,59 +1,52 @@
 package com.sprint.mission.discodeit.repository.jcf;
 
-import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+@ConditionalOnProperty(name = "discodeit.repository.type", havingValue = "jcf", matchIfMissing = true)
+@Repository
 public class JCFMessageRepository implements MessageRepository {
-    private final Map<UUID, Channel> data = new HashMap<>();
 
-    @Override
-    public Message saveMsg(Message msg) {
-        return null;
-    }
+  private final Map<UUID, Message> data;
 
-    @Override
-    public Message findMsgId(String id) {
-        return null;
-    }
+  public JCFMessageRepository() {
+    this.data = new HashMap<>();
+  }
 
-    @Override
-    public Message getUserMsg(String userMsg) {
-        return null;
-    }
+  @Override
+  public Message save(Message message) {
+    this.data.put(message.getId(), message);
+    return message;
+  }
 
-    @Override
-    public Message getChannelMsg(String channelMsg) {
-        return null;
-    }
+  @Override
+  public Optional<Message> findById(UUID id) {
+    return Optional.ofNullable(this.data.get(id));
+  }
 
-    @Override
-    public List<Message> findAllMsgId() {
-        return List.of();
-    }
+  @Override
+  public List<Message> findAllByChannelId(UUID channelId) {
+    return this.data.values().stream().filter(message -> message.getChannelId().equals(channelId))
+        .toList();
+  }
 
-    @Override
-    public List<Message> getUserAll(String inputUser) {
-        return List.of();
-    }
+  @Override
+  public boolean existsById(UUID id) {
+    return this.data.containsKey(id);
+  }
 
-    @Override
-    public List<Message> getChannelAll(String inputChannel) {
-        return List.of();
-    }
+  @Override
+  public void deleteById(UUID id) {
+    this.data.remove(id);
+  }
 
-    @Override
-    public Message editMsg(UUID id, String newContent) {
-        return null;
-    }
-
-    @Override
-    public boolean delMsg(UUID id) {
-        return false;
-    }
+  @Override
+  public void deleteAllByChannelId(UUID channelId) {
+    this.findAllByChannelId(channelId)
+        .forEach(message -> this.deleteById(message.getId()));
+  }
 }

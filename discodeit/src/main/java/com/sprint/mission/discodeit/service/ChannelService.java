@@ -1,22 +1,26 @@
 package com.sprint.mission.discodeit.service;
 
+import com.sprint.mission.discodeit.dto.data.ChannelDto;
+import com.sprint.mission.discodeit.dto.request.PrivateChannelCreateRequest;
+import com.sprint.mission.discodeit.dto.request.PublicChannelCreateRequest;
+import com.sprint.mission.discodeit.dto.request.PublicChannelUpdateRequest;
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.ChannelType;
+
 import java.util.List;
 import java.util.UUID;
 
-
 public interface ChannelService {
-    // 생성
-    Channel addCh(String inputchannelname);
 
-    // 조회
-    Channel findCh(String channelName);
+  Channel create(PublicChannelCreateRequest request);
 
-    // 전체조회
-    List<Channel> findAll();
-    // 수정
-    Channel editCh(UUID id, String newChatroom);
+  Channel create(PrivateChannelCreateRequest request);
 
-    // 삭제
-    boolean delCh(UUID id);
+  ChannelDto find(UUID channelId);
+
+  List<ChannelDto> findAllByUserId(UUID userId);
+
+  Channel update(UUID channelId, PublicChannelUpdateRequest request);
+
+  void delete(UUID channelId);
 }

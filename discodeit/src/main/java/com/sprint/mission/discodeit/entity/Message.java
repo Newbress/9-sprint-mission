@@ -1,83 +1,46 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class Message implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private final UUID id;
-    private final Long createdAt;
-    private Long updatedAt;
-    private String userName;
-    private String channelName;
-    private String content;
-    private UUID userId;
-    private UUID channelId;
 
+  private static final long serialVersionUID = 1L;
 
-    public Message( String channelName, String userName, String content) {
-        this.id = UUID.randomUUID();
-        long now = System.currentTimeMillis();
-        this.createdAt = now;
-        this.updatedAt = now;
-        this.channelName = channelName;
-        this.userName = userName;
-        this.content = content;
+  private UUID id;
+  private Instant createdAt;
+  private Instant updatedAt;
+  //
+  private String content;
+  //
+  private UUID channelId;
+  private UUID authorId;
+  private List<UUID> attachmentIds;
+
+  public Message(String content, UUID channelId, UUID authorId, List<UUID> attachmentIds) {
+    this.id = UUID.randomUUID();
+    this.createdAt = Instant.now();
+    //
+    this.content = content;
+    this.channelId = channelId;
+    this.authorId = authorId;
+    this.attachmentIds = attachmentIds;
+  }
+
+  public void update(String newContent) {
+    boolean anyValueUpdated = false;
+    if (newContent != null && !newContent.equals(this.content)) {
+      this.content = newContent;
+      anyValueUpdated = true;
     }
 
-    public UUID getId() {
-        return id;
+    if (anyValueUpdated) {
+      this.updatedAt = Instant.now();
     }
-
-    public String getCreatedAt() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(this.createdAt));
-    }
-
-    public String getUpdatedAt() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(new Date(this.updatedAt));
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public Object getUserId() {
-        return id;
-    }
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-    public Object getChannelId() {
-        return id;
-    }
-
-    public void setChannelId(UUID channelId) {
-        this.channelId = channelId;
-    }
-
-    public void update( String newContent) {
-        this.content = newContent;
-    }
-
-    @Override
-    public String toString() {
-        return "채널 ID: " + channelName + "\n" +
-                "작성자 ID: " + userName + "\n" +
-                "메세지 내용: " + content + "\n" +
-                "메세지 ID: " + id + "\n";
-    }
-
-
+  }
 }
