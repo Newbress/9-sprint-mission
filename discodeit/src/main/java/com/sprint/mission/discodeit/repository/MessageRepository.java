@@ -3,27 +3,20 @@ package com.sprint.mission.discodeit.repository;
 import com.sprint.mission.discodeit.entity.Message;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface MessageRepository {
-    Message saveMsg(Message msg);
 
-    // 조회
-    Message findMsgId(String id);
+  Message save(Message message);
 
-    Message getUserMsg(String userMsg);
+  Optional<Message> findById(UUID id);
 
-    Message getChannelMsg(String channelMsg);
+  List<Message> findAllByChannelId(UUID channelId);
 
-    // 전체 조회
-    List<Message> findAllMsgId();
+  boolean existsById(UUID id);
 
-    List<Message> getUserAll(String inputUser);
+  void deleteById(UUID id);
 
-    List<Message> getChannelAll(String inputChannel);
-    // 수정
-    Message editMsg(UUID id, String newContent);
-
-    // 삭제
-    boolean delMsg(UUID id);
+  void deleteAllByChannelId(UUID channelId);
 }

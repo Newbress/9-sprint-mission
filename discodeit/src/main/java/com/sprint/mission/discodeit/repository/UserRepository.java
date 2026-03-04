@@ -7,25 +7,20 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository {
-    User saveUser(User user);
 
-    // 조회
-    User findUserName(String userName);
+  User save(User user);
 
-    User getUserEmail(String email);
+  Optional<User> findById(UUID id);
 
-    User getUserPhone(String phone);
+  Optional<User> findByUsername(String username);
 
-    User findById(UUID id);
+  List<User> findAll();
 
-    User findByContactInfo(String input);
-    // 전체 조회
-    List<User> getall();
+  boolean existsById(UUID id);
 
-    // 수정
-    User editUser(User findThing,String newUsername, String newEmail, String newPhone);
+  void deleteById(UUID id);
 
-    // 삭제
-    boolean delUser(UUID id);
+  boolean existsByEmail(String email);
 
+  boolean existsByUsername(String username);
 }

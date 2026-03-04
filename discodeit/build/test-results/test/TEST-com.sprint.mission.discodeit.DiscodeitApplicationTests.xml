@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.sprint.mission.discodeit.DiscodeitApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-24T06:25:24" hostname="appleui-MacBookAir.local" time="0.427">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.sprint.mission.discodeit.DiscodeitApplicationTests" time="0.427"/>
+  <system-out><![CDATA[15:25:23.138 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.sprint.mission.discodeit.DiscodeitApplicationTests]: DiscodeitApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+15:25:23.194 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.sprint.mission.discodeit.DiscodeitApplication for test class com.sprint.mission.discodeit.DiscodeitApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.0)
+
+2026-02-24T15:25:23.393+09:00  INFO 3952 --- [discodeit] [    Test worker] c.s.m.d.DiscodeitApplicationTests        : Starting DiscodeitApplicationTests using Java 17.0.17 with PID 3952 (started by apple in /Users/apple/Downloads/0-sprint-mission-s5-v1-base)
+2026-02-24T15:25:23.393+09:00  INFO 3952 --- [discodeit] [    Test worker] c.s.m.d.DiscodeitApplicationTests        : No active profile set, falling back to 1 default profile: "default"
+2026-02-24T15:25:23.932+09:00  INFO 3952 --- [discodeit] [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-02-24T15:25:24.108+09:00  INFO 3952 --- [discodeit] [    Test worker] c.s.m.d.DiscodeitApplicationTests        : Started DiscodeitApplicationTests in 0.853 seconds (process running for 1.348)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
