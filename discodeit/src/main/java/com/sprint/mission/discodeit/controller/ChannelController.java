@@ -43,8 +43,7 @@ public class ChannelController {
   @Operation(summary = "Public Channel 생성", operationId = "create_3", responses = {
       @ApiResponse(
           responseCode = "201",
-          description = "Public Channel이 성공적으로 생성됨",
-          content = @Content(schema = @Schema(implementation = Channel.class))
+          description = "Public Channel이 성공적으로 생성됨"
       )
   })
   @ResponseStatus(HttpStatus.CREATED)
@@ -59,8 +58,7 @@ public class ChannelController {
   @Operation(summary = "Private Channel 생성", operationId = "create_4", responses = {
       @ApiResponse(
           responseCode = "201",
-          description = "Private Channel이 성공적으로 생성됨",
-          content = @Content(schema = @Schema(implementation = Channel.class))
+          description = "Private Channel이 성공적으로 생성됨"
       )
   })
   @PostMapping(path = "private")
@@ -74,8 +72,7 @@ public class ChannelController {
   @Operation(summary = "Channel 정보 수정", operationId = "update_3", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "Channel 정보가 성공적으로 수정됨",
-          content = @Content(schema = @Schema(implementation = Channel.class))
+          description = "Channel 정보가 성공적으로 수정됨"
       ),
       @ApiResponse(
           responseCode = "400",
@@ -123,8 +120,7 @@ public class ChannelController {
   @Operation(summary = "User가 참여 중인 Channel 목록 조회", operationId = "findAll_1", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "Channel 목록 조회 성공",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChannelDto.class)))
+          description = "Channel 목록 조회 성공"
       )
   })
   @GetMapping

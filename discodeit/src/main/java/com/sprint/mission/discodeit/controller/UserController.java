@@ -43,8 +43,7 @@ public class UserController {
   @Operation(summary = "User 등록", operationId = "create", responses = {
       @ApiResponse(
           responseCode = "201",
-          description = "User가 성공적으로 생성됨",
-          content = @Content(schema = @Schema(implementation = User.class))
+          description = "User가 성공적으로 생성됨"
       ),
       @ApiResponse(
           responseCode = "400",
@@ -70,8 +69,7 @@ public class UserController {
   @Operation(summary = "User 정보 수정", operationId = "update", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "User 정보가 성공적으로 수정됨",
-          content = @Content(schema = @Schema(implementation = User.class))
+          description = "User 정보가 성공적으로 수정됨"
       ),
       @ApiResponse(
           responseCode = "400",
@@ -122,8 +120,7 @@ public class UserController {
   @Operation(summary = "전체 User 목록 조회", operationId = "findAll", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "User 목록 조회 성공",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))
+          description = "User 목록 조회 성공"
       )
   })
   @GetMapping
@@ -137,8 +134,7 @@ public class UserController {
   @Operation(summary = "User 온라인 상태 업데이트", operationId = "updateUserStatusByUserId", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "User 온라인 상태가 성공적으로 업데이트됨",
-          content = @Content(schema = @Schema(implementation = UserStatus.class))
+          description = "User 온라인 상태가 성공적으로 업데이트됨"
       ),
       @ApiResponse(
           responseCode = "404",

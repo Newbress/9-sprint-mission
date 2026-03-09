@@ -40,8 +40,7 @@ public class ReadStatusController {
   @Operation(summary = "Message 읽음 상태 생성", operationId = "create_1", responses = {
       @ApiResponse(
           responseCode = "201",
-          description = "Message 읽음 상태가 성공적으로 생성됨",
-          content = @Content(schema = @Schema(implementation = ReadStatus.class))
+          description = "Message 읽음 상태가 성공적으로 생성됨"
       ),
       @ApiResponse(
           responseCode = "400",
@@ -66,8 +65,7 @@ public class ReadStatusController {
   @Operation(summary = "Message 읽음 상태 수정", operationId = "update_1", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "Message 읽음 상태가 성공적으로 수정됨", // 복구
-          content = @Content(schema = @Schema(implementation = ReadStatus.class))
+          description = "Message 읽음 상태가 성공적으로 수정됨" // 복구
       ),
       @ApiResponse(
           responseCode = "404",
@@ -89,8 +87,7 @@ public class ReadStatusController {
   @Operation(summary = "User의 Message 읽음 상태 목록 조회", operationId = "findAllByUserId", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "Message 읽음 상태 목록 조회 성공",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReadStatus.class)))
+          description = "Message 읽음 상태 목록 조회 성공"
       )
   })
   @GetMapping

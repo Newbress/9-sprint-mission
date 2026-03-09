@@ -44,6 +44,7 @@ public class BasicUserStatusService implements UserStatusService {
     return userStatusMapper.toDto(userStatus);
   }
 
+  @Transactional(readOnly = true)
   @Override
   public UserStatus find(UUID userStatusId) {
     return userStatusRepository.findById(userStatusId)
@@ -51,6 +52,7 @@ public class BasicUserStatusService implements UserStatusService {
             () -> new NoSuchElementException("UserStatus with id " + userStatusId + " not found"));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<UserStatus> findAll() {
     return userStatusRepository.findAll().stream()

@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
 
   private final BinaryContentMapper binaryContentMapper;
-  private final ChannelMapper channelMapper;
-  private final MessageMapper messageMapper;
+
 
   public UserDto toDto(User user) {
     Boolean online = (user.getStatus() != null) && user.getStatus().isOnline();

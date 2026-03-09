@@ -42,8 +42,7 @@ public class BinaryContentController {
   @Operation(summary = "첨부 파일 조회", operationId = "find", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "첨부 파일 조회 성공",
-          content = @Content(schema = @Schema(implementation = BinaryContent.class))
+          description = "첨부 파일 조회 성공"
       ),
       @ApiResponse(
           responseCode = "404",
@@ -63,8 +62,7 @@ public class BinaryContentController {
   @Operation(summary = "여러 첨부 파일 조회", operationId = "findAllByIdIn", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "첨부 파일 목록 조회 성공",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = BinaryContent.class)))
+          description = "첨부 파일 목록 조회 성공"
       )
   })
   @GetMapping

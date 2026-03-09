@@ -31,8 +31,7 @@ public class AuthController {
   @Operation(summary = "로그인", operationId = "login", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "로그인 성공", //
-          content = @Content(schema = @Schema(implementation = User.class))
+          description = "로그인 성공"
       ),
       @ApiResponse(
           responseCode = "400",

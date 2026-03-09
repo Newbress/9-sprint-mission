@@ -36,9 +36,9 @@ public class BasicReadStatusService implements ReadStatusService {
     UUID channelId = request.channelId();
 
     User user = userRepository.findById(userId)
-        .orElseThrow(()-> new NoSuchElementException("User with id " + userId + " does not exist"));
+        .orElseThrow(()-> new NoSuchElementException("User with id " + userId + " does not found"));
     Channel channel = channelRepository.findById(channelId)
-        .orElseThrow(()-> new NoSuchElementException("Channel with id " + channelId + "does not exist"));
+        .orElseThrow(()-> new NoSuchElementException("Channel with id " + channelId + "does not found"));
 
     ReadStatus readStatus = readStatusRepository.findByUserIdAndChannelId(userId, channelId)
         .orElseGet(() -> {

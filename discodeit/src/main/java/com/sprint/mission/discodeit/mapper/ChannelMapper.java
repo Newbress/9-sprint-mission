@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.mapper;
 
 import com.sprint.mission.discodeit.dto.data.ChannelDto;
+import com.sprint.mission.discodeit.dto.data.UserDto;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.Message;
@@ -22,18 +23,22 @@ public class ChannelMapper {
 
   private final ReadStatusRepository readStatusRepository;
   private final MessageRepository messageRepository;
+  private final UserMapper userMapper;
 
   public ChannelDto toDto(Channel channel) {
-    List<UUID> participantIds = new ArrayList<>();
-    if (channel.getType().equals(ChannelType.PRIVATE)) {
-      participantIds = readStatusRepository.findAllByChannelId(channel.getId())
-          .stream()
-          .map(ReadStatus::getUser)
-          .map(User::getId)
-          .toList();
-    }
 
-    Instant lastMessageAt = messageRepository.findAllByChannelId(channel.getId())
+    List<UserDto> participantIds = new ArrayList<>();
+    if (channel.getType().equals(ChannelType.PRIVATE)) {
+       readStatusRepository.findAllByChannelId(channel.getId())
+          .stream()
+           .map(ReadStatus::getUser)
+           .map(userMapper::toDto)
+           .forEach(participantIds::add);
+
+
+    } //TODO 아마 userMapper를 사용해야 하는거 같음
+
+    Instant lastMessageAt = messageRepository.findTopByChannelIdOrderByCreatedAtDesc(channel.getId())
         .stream()
         .sorted(Comparator.comparing(Message::getCreatedAt).reversed())
         .map(Message::getCreatedAt)
