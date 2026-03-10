@@ -12,12 +12,15 @@ spring:
     password: discodeit1234
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true
     #        default_batch_fetch_size: 100
     open-in-view: false
+  sql:
+    init:
+      mode: never
 
 
 logging:

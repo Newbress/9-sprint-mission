@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -129,15 +130,17 @@ public class MessageController {
   public ResponseEntity<PageResponse<MessageDto>> findAllByChannelId(
       @Parameter(description = "조회할 Channel ID")
       @RequestParam("channelId") UUID channelId,
+      @Parameter
+      @RequestParam(required = false, value = "cursor")
+      Instant cursor,
       @PageableDefault(
           size = 50,
-          page = 0,
           sort = "createdAt",
           direction = Direction.DESC
       )
       Pageable pageable)
       {
-    PageResponse<MessageDto> messages = messageService.findAllByChannelId(channelId, pageable);
+    PageResponse<MessageDto> messages = messageService.findAllByChannelId(channelId, cursor, pageable);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(messages);

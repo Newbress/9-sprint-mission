@@ -63,10 +63,10 @@ public class BasicUserService implements UserService {
     String password = userCreateRequest.password();
 
     User user = new User(username, email, password, nullableProfileId);
-    User createdUser = userRepository.save(user);
-
     Instant now = Instant.now();
     UserStatus userStatus = new UserStatus(user, now);
+
+    userRepository.save(user);
     userStatusRepository.save(userStatus);
 
     return userMapper.toDto(user);

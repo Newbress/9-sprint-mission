@@ -6,7 +6,7 @@ import java.util.UUID;
 @Schema(description = "로그인 정보")
 public record LoginRequest(
     String username,
-    String password,
-    UUID profileId
+    String password
+    //, UUID profileId
 ) {
 }

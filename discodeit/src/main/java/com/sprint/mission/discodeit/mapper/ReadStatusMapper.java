@@ -10,14 +10,13 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ReadStatusMapper {
 
-  private final UserMapper userMapper;
-  private final ChannelMapper channelMapper;
+
 
   public ReadStatusDto toDto(ReadStatus readStatus) {
     return new ReadStatusDto(
         readStatus.getId(),
-        userMapper.toDto(readStatus.getUser()),
-        channelMapper.toDto(readStatus.getChannel()),
+        readStatus.getUser().getId(),
+        readStatus.getChannel().getId(),
         readStatus.getLastReadAt()
     );
   }
