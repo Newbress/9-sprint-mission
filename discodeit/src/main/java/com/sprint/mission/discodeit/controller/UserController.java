@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.data.UserDto;
+import com.sprint.mission.discodeit.dto.data.UserStatusDto;
 import com.sprint.mission.discodeit.dto.request.BinaryContentCreateRequest;
 import com.sprint.mission.discodeit.dto.request.UserCreateRequest;
 import com.sprint.mission.discodeit.dto.request.UserStatusUpdateRequest;
@@ -42,8 +43,7 @@ public class UserController {
   @Operation(summary = "User 등록", operationId = "create", responses = {
       @ApiResponse(
           responseCode = "201",
-          description = "User가 성공적으로 생성됨",
-          content = @Content(schema = @Schema(implementation = User.class))
+          description = "User가 성공적으로 생성됨"
       ),
       @ApiResponse(
           responseCode = "400",
@@ -52,7 +52,7 @@ public class UserController {
       )
   })
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  public ResponseEntity<User> create(
+  public ResponseEntity<UserDto> create(
       @Parameter(description = "User 생성 정보")
       @RequestPart("userCreateRequest") UserCreateRequest userCreateRequest,
       @Parameter(description = "User 프로필 이미지")
@@ -60,7 +60,7 @@ public class UserController {
   ) {
     Optional<BinaryContentCreateRequest> profileRequest = Optional.ofNullable(profile)
         .flatMap(this::resolveProfileRequest);
-    User createdUser = userService.create(userCreateRequest, profileRequest);
+    UserDto createdUser = userService.create(userCreateRequest, profileRequest);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(createdUser);
@@ -69,8 +69,7 @@ public class UserController {
   @Operation(summary = "User 정보 수정", operationId = "update", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "User 정보가 성공적으로 수정됨",
-          content = @Content(schema = @Schema(implementation = User.class))
+          description = "User 정보가 성공적으로 수정됨"
       ),
       @ApiResponse(
           responseCode = "400",
@@ -84,7 +83,7 @@ public class UserController {
       )
   })
   @PatchMapping(path = "{userId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-  public ResponseEntity<User> update(
+  public ResponseEntity<UserDto> update(
       @Parameter(description = "수정할 User ID")
       @PathVariable("userId") UUID userId,
       @Parameter(description = "수정할 User 정보")
@@ -94,7 +93,7 @@ public class UserController {
   ) {
     Optional<BinaryContentCreateRequest> profileRequest = Optional.ofNullable(profile)
         .flatMap(this::resolveProfileRequest);
-    User updatedUser = userService.update(userId, userUpdateRequest, profileRequest);
+    UserDto updatedUser = userService.update(userId, userUpdateRequest, profileRequest);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(updatedUser);
@@ -121,8 +120,7 @@ public class UserController {
   @Operation(summary = "전체 User 목록 조회", operationId = "findAll", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "User 목록 조회 성공",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserDto.class)))
+          description = "User 목록 조회 성공"
       )
   })
   @GetMapping
@@ -136,8 +134,7 @@ public class UserController {
   @Operation(summary = "User 온라인 상태 업데이트", operationId = "updateUserStatusByUserId", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "User 온라인 상태가 성공적으로 업데이트됨",
-          content = @Content(schema = @Schema(implementation = UserStatus.class))
+          description = "User 온라인 상태가 성공적으로 업데이트됨"
       ),
       @ApiResponse(
           responseCode = "404",
@@ -146,11 +143,11 @@ public class UserController {
       )
   })
   @PatchMapping(path = "{userId}/userStatus")
-  public ResponseEntity<UserStatus> updateUserStatusByUserId(
+  public ResponseEntity<UserStatusDto> updateUserStatusByUserId(
       @Parameter(description = "상태를 변경할 User ID")
       @PathVariable("userId") UUID userId,
       @RequestBody UserStatusUpdateRequest request) {
-    UserStatus updatedUserStatus = userStatusService.updateByUserId(userId, request);
+    UserStatusDto updatedUserStatus = userStatusService.updateByUserId(userId, request);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(updatedUserStatus);

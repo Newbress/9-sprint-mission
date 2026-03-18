@@ -43,14 +43,13 @@ public class ChannelController {
   @Operation(summary = "Public Channel 생성", operationId = "create_3", responses = {
       @ApiResponse(
           responseCode = "201",
-          description = "Public Channel이 성공적으로 생성됨",
-          content = @Content(schema = @Schema(implementation = Channel.class))
+          description = "Public Channel이 성공적으로 생성됨"
       )
   })
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping(path = "public")
-  public ResponseEntity<Channel> create(@RequestBody PublicChannelCreateRequest request) {
-    Channel createdChannel = channelService.create(request);
+  public ResponseEntity<ChannelDto> create(@RequestBody PublicChannelCreateRequest request) {
+    ChannelDto createdChannel = channelService.create(request);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(createdChannel);
@@ -59,13 +58,12 @@ public class ChannelController {
   @Operation(summary = "Private Channel 생성", operationId = "create_4", responses = {
       @ApiResponse(
           responseCode = "201",
-          description = "Private Channel이 성공적으로 생성됨",
-          content = @Content(schema = @Schema(implementation = Channel.class))
+          description = "Private Channel이 성공적으로 생성됨"
       )
   })
   @PostMapping(path = "private")
-  public ResponseEntity<Channel> create(@RequestBody PrivateChannelCreateRequest request) {
-    Channel createdChannel = channelService.create(request);
+  public ResponseEntity<ChannelDto> create(@RequestBody PrivateChannelCreateRequest request) {
+    ChannelDto createdChannel = channelService.create(request);
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(createdChannel);
@@ -74,8 +72,7 @@ public class ChannelController {
   @Operation(summary = "Channel 정보 수정", operationId = "update_3", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "Channel 정보가 성공적으로 수정됨",
-          content = @Content(schema = @Schema(implementation = Channel.class))
+          description = "Channel 정보가 성공적으로 수정됨"
       ),
       @ApiResponse(
           responseCode = "400",
@@ -89,11 +86,11 @@ public class ChannelController {
       )
   })
   @PatchMapping(path = "{channelId}")
-  public ResponseEntity<Channel> update(
+  public ResponseEntity<ChannelDto> update(
       @Parameter(description = "수정할 Channel ID")
       @PathVariable("channelId") UUID channelId,
       @RequestBody PublicChannelUpdateRequest request) {
-    Channel udpatedChannel = channelService.update(channelId, request);
+    ChannelDto udpatedChannel = channelService.update(channelId, request);
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(udpatedChannel);
@@ -123,8 +120,7 @@ public class ChannelController {
   @Operation(summary = "User가 참여 중인 Channel 목록 조회", operationId = "findAll_1", responses = {
       @ApiResponse(
           responseCode = "200",
-          description = "Channel 목록 조회 성공",
-          content = @Content(array = @ArraySchema(schema = @Schema(implementation = ChannelDto.class)))
+          description = "Channel 목록 조회 성공"
       )
   })
   @GetMapping
