@@ -6,53 +6,46 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.ReadStatus;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Component
-@RequiredArgsConstructor
-public class ChannelMapper {
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
+public abstract class ChannelMapper {
 
-  private final ReadStatusRepository readStatusRepository;
-  private final MessageRepository messageRepository;
-  private final UserMapper userMapper;
+  @Autowired
+  protected ReadStatusRepository readStatusRepository;
+  @Autowired
+  protected MessageRepository messageRepository;
+  @Autowired
+  protected UserMapper userMapper;
 
-  public ChannelDto toDto(Channel channel) {
+  @Mapping(target = "participants", expression = "java(getParticipants(channel))")
+  @Mapping(target = "lastMessageAt", expression = "java(getLastMessageAt(channel))")
+  public abstract ChannelDto toDto(Channel channel);
 
-    List<UserDto> participantIds = new ArrayList<>();
+  protected List<UserDto> getParticipants(Channel channel) {
+    List<UserDto> participants = new ArrayList<>();
     if (channel.getType().equals(ChannelType.PRIVATE)) {
-       readStatusRepository.findAllByChannelId(channel.getId())
+      return readStatusRepository.findAllByChannelId(channel.getId())
           .stream()
-           .map(ReadStatus::getUser)
-           .map(userMapper::toDto)
-           .forEach(participantIds::add);
+          .map(ReadStatus::getUser)
+          .map(userMapper::toDto)
+          .toList();
+    }
+    return participants;
+  }
 
-
-    } //TODO 아마 userMapper를 사용해야 하는거 같음
-
-    Instant lastMessageAt = messageRepository.findTopByChannelIdOrderByCreatedAtDesc(channel.getId())
+  protected Instant getLastMessageAt(Channel channel) {
+    return messageRepository.findTopByChannelIdOrderByCreatedAtDesc(channel.getId())
         .stream()
-        .sorted(Comparator.comparing(Message::getCreatedAt).reversed())
         .map(Message::getCreatedAt)
-        .limit(1)
         .findFirst()
         .orElse(Instant.MIN);
-
-    return new ChannelDto(
-        channel.getId(),
-        channel.getType(),
-        channel.getName(),
-        channel.getDescription(),
-        participantIds,
-        lastMessageAt
-    );
   }
 }
