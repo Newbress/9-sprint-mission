@@ -7,6 +7,7 @@ import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
@@ -31,7 +32,6 @@ public class BasicAuthService implements AuthService {
     if (!user.getPassword().equals(password)) {
       throw new IllegalArgumentException("Wrong password");
     }
-
     return userMapper.toDto(user);
   }
 }

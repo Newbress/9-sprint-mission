@@ -19,6 +19,7 @@ import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BasicMessageService implements MessageService {
@@ -75,6 +77,7 @@ public class BasicMessageService implements MessageService {
         attachments
     );
     messageRepository.save(message);
+    log.info("메세지를 생성했습니다.");
     return messageMapper.toDto(message);
   }
 
@@ -106,6 +109,7 @@ public class BasicMessageService implements MessageService {
             () -> new NoSuchElementException("Message with id " + messageId + " not found"));
     message.update(newContent);
     messageRepository.save(message);
+    log.info("메세지를 수정했습니다");
     return messageMapper.toDto(message);
   }
 
@@ -117,6 +121,7 @@ public class BasicMessageService implements MessageService {
             () -> new NoSuchElementException("Message with id " + messageId + " not found"));
 
     binaryContentRepository.deleteAll(message.getAttachments());
+    log.info("메세지를 삭제했습니다.");
     messageRepository.deleteById(messageId);
   }
 }

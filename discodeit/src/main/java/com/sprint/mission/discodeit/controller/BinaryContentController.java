@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Slf4j
 @Tag(name = "BinaryContent",
     description = "첨부파일 API")
 @RequiredArgsConstructor
@@ -57,6 +58,7 @@ public class BinaryContentController {
   public ResponseEntity<Resource> download(
       @PathVariable("binaryContentId") UUID binaryContentId) {
     BinaryContentDto binaryContentDto = binaryContentService.find(binaryContentId);
+    log.info("파일을 다운로드 했습니다.");
     return binaryContentStorage.download(binaryContentDto);
 
   }
