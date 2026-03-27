@@ -20,8 +20,37 @@ spring:
 logging:
   level:
     org.hibernate.SQL: info
-
-
+info:
+  app:
+    name: Discodeit
+    version: 1.7.0
+    java:
+      version: 17
+    spring-boot:
+      version: 3.4.0
+  config:
+    datasource:
+      url: ${spring.datasource.url}
+      driver-class-name: ${spring.datasource.driver-class-name}
+    jpa:
+      ddl-auto: ${spring.jpa.hibernate.ddl-auto}
+    storage:
+      type: ${storage.type:local} # 만약 환경변수가 없으면 기본값(local) 출력
+      path: ${storage.path:/tmp}
+    multipart:
+      max-file-size: ${spring.servlet.multipart.max-file-size}
+      max-request-size: ${spring.servlet.multipart.max-request-size}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health, info, metrics, loggers"
+  info:
+    env:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
 discodeit:
   storage:
     type: local
