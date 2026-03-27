@@ -5,9 +5,14 @@ import static com.sprint.mission.discodeit.exception.ErrorCode.PRIVATE_CHANNEL_U
 import static com.sprint.mission.discodeit.exception.ErrorCode.USER_NOT_FOUND;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -38,6 +43,32 @@ public class GlobalExceptionHandler {
         .body(response);
   }
 
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException e) {
+    log.error("요청 유효성 검사 실패: {}", e.getMessage());
+
+    Map<String, Object> validationErrors = new HashMap<>();
+    e.getBindingResult().getAllErrors().forEach(error -> {
+      String fieldName = ((FieldError) error).getField();
+      String errorMessage = error.getDefaultMessage();
+      validationErrors.put(fieldName, errorMessage);
+    });
+
+    ErrorResponse response = new ErrorResponse(
+        Instant.now(),
+        "VALIDATION_ERROR",
+        "요청 데이터 유효성 검사에 실패했습니다",
+        validationErrors,
+        e.getClass().getSimpleName(),
+        HttpStatus.BAD_REQUEST.value()
+    );
+
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body(response);
+  }
+
+
   private HttpStatus determineHttpStatus(DiscodeitException exception) {
     ErrorCode errorCode = exception.getErrorCode();
     return switch (errorCode) {
@@ -45,7 +76,6 @@ public class GlobalExceptionHandler {
            READ_STATUS_NOT_FOUND, USER_STATUS_NOT_FOUND -> HttpStatus.NOT_FOUND;
       case DUPLICATE_USER, DUPLICATE_USERNAME, DUPLICATE_EMAIL -> HttpStatus.CONFLICT;
       case PRIVATE_CHANNEL_UPDATE, USER_STATUS_INVALID, MESSAGE_CONTENT_INVALID, BINARY_CONTENT_TYPE_INVALID-> HttpStatus.BAD_REQUEST;
-      case INTERNAL_SERVER_ERROR -> INTERNAL_SERVER_ERROR;
     };
   }
 }

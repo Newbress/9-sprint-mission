@@ -11,6 +11,7 @@ import com.sprint.mission.discodeit.service.UserStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,9 +39,9 @@ public class UserController {
   @Operation(summary = "")
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<UserDto> create(
-      @Parameter(description = "User 생성 정보")
+      @Valid @Parameter(description = "User 생성 정보")
       @RequestPart("userCreateRequest") UserCreateRequest userCreateRequest,
-      @Parameter(description = "User 프로필 이미지")
+      @Valid @Parameter(description = "User 프로필 이미지")
       @RequestPart(value = "profile", required = false) MultipartFile profile
   ) {
     Optional<BinaryContentCreateRequest> profileRequest = Optional.ofNullable(profile)
@@ -56,9 +57,9 @@ public class UserController {
   public ResponseEntity<UserDto> update(
       @Parameter(description = "수정할 User ID")
       @PathVariable("userId") UUID userId,
-      @Parameter(description = "수정할 User 정보")
+      @Valid @Parameter(description = "수정할 User 정보")
       @RequestPart("userUpdateRequest") UserUpdateRequest userUpdateRequest,
-      @Parameter(description = "수정할 User 프로필 이미지")
+      @Valid @Parameter(description = "수정할 User 프로필 이미지")
       @RequestPart(value = "profile", required = false) MultipartFile profile
   ) {
     Optional<BinaryContentCreateRequest> profileRequest = Optional.ofNullable(profile)
@@ -94,7 +95,7 @@ public class UserController {
   public ResponseEntity<UserStatusDto> updateUserStatusByUserId(
       @Parameter(description = "상태를 변경할 User ID")
       @PathVariable("userId") UUID userId,
-      @RequestBody UserStatusUpdateRequest request) {
+      @Valid @RequestBody UserStatusUpdateRequest request) {
     UserStatusDto updatedUserStatus = userStatusService.updateByUserId(userId, request);
     return ResponseEntity
         .status(HttpStatus.OK)
