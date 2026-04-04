@@ -17,9 +17,16 @@ spring:
   sql:
     init:
       mode: never
+  boot:
+    admin:
+      client:
+        instance:
+          name: discodeit
+
 logging:
   level:
     org.hibernate.SQL: info
+
 info:
   app:
     name: Discodeit
@@ -40,6 +47,7 @@ info:
     multipart:
       max-file-size: ${spring.servlet.multipart.max-file-size}
       max-request-size: ${spring.servlet.multipart.max-request-size}
+
 management:
   endpoints:
     web:
@@ -51,6 +59,7 @@ management:
   endpoint:
     health:
       show-details: always
+
 discodeit:
   storage:
     type: local
