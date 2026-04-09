@@ -27,6 +27,8 @@ services:
     container_name: discodeit-app
     ports:
       - "${APP_PORT}:${CONTAINER_PORT}"
+    env_file:
+      - .env
     environment:
       SPRING_PROFILES_ACTIVE: prod
       # 'db' 서비스 이름을 호스트로 사용
