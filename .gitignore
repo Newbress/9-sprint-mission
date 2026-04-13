@@ -8,3 +8,5 @@ uploads/
 .discodeit/
 
 .idea/
+
+.env
