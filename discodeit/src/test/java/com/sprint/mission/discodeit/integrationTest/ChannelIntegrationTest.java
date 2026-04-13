@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.ChannelType;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
+import jakarta.persistence.EntityManager;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,7 @@ class ChannelIntegrationTest {
   @Autowired private MockMvc mockMvc;
   @Autowired private ObjectMapper objectMapper;
   @Autowired private ChannelRepository channelRepository;
+  @Autowired private EntityManager em;
 
   @Test
   @DisplayName("퍼블릭 채널 생성 통합 테스트 - 성공 (실제 DB 저장 확인)")
@@ -64,6 +66,9 @@ class ChannelIntegrationTest {
             .content(updateJson))
         .andDo(print())
         .andExpect(status().isOk());
+
+    em.flush();
+    em.clear();
 
     Channel updatedChannel = channelRepository.findById(savedChannel.getId()).orElseThrow();
     assertThat(updatedChannel.getName()).isEqualTo("수정채널");
