@@ -1,8 +1,9 @@
 name: Java CI with Gradle and CodeCov
 
 on:
-  pull_request:
+  push:
     branches: [ "hyunhong-sprint8" ]
+  workflow_dispatch:
 
 jobs:
   test:
