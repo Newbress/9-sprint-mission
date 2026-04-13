@@ -57,7 +57,7 @@ class ChannelIntegrationTest {
     Channel channel = new Channel(ChannelType.PUBLIC, "수정전이름", "수정전설명");
     Channel savedChannel = channelRepository.save(channel);
 
-    String updateJson = "{\"newName\":\"수정채널\", \"newDescription\":\"수정된 설명입니다.\"}";
+    String updateJson = "{\"name\":\"수정채널\", \"description\":\"수정된 설명입니다.\"}";
 
     mockMvc.perform(patch("/api/channels/{channelId}", savedChannel.getId())
             .contentType(MediaType.APPLICATION_JSON)
