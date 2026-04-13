@@ -71,7 +71,7 @@ class ChannelIntegrationTest {
     em.clear();
 
     Channel updatedChannel = channelRepository.findById(savedChannel.getId()).orElseThrow();
-    assertThat(updatedChannel.getName()).isEqualTo("수정채널");
+    assertThat(updatedChannel.getName()).isEqualTo("수정된새로운채널");
   }
 
   @Test
