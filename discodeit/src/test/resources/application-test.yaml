@@ -18,3 +18,16 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
+
+jwt:
+  secret: "this-is-a-dummy-secret-key-for-test-this-is-a-dummy-secret-key-for-test" # (길이가 길어야 할 수 있음)
+
+cloud:
+  aws:
+    credentials:
+      access-key: dummy-access-key
+      secret-key: dummy-secret-key
+    s3:
+      bucket: dummy-bucket-name
+    region:
+      static: ap-northeast-2
