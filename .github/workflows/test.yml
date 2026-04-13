@@ -23,9 +23,21 @@ jobs:
         working-directory: ./discodeit
         run: chmod +x gradlew
 
+
+
       # 테스트 실행 및 커버리지 보고서 생성 (JaCoCo 활용)
       - name: Test with Gradle
         working-directory: ./discodeit
+        env:
+          AWS_ACCESS_KEY_ID: "dummy-access-key"
+          AWS_SECRET_ACCESS_KEY: "dummy-secret-key"
+          AWS_REGION: "ap-northeast-2"
+          S3_BUCKET_NAME: "dummy-bucket-name"
+          DB_NAME: "dummy_db"
+          DB_USER: "dummy_user"
+          DB_PASSWORD: "dummy_password"
+          APP_PORT: "8081"
+          CONTAINER_PORT: "8088"
         run: ./gradlew test
 
       # CodeCov에 결과 업로드
