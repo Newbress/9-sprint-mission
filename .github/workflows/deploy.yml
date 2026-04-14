@@ -62,6 +62,7 @@ jobs:
             --task-definition ${{ vars.ECS_TASK_DEFINITION }} \
             --region ${{ vars.AWS_REGION }} \
             --query taskDefinition > task-definition.json
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy, .enableFaultInjection)' raw-task-definition.json > task-definition.json
 
       # 7. 태스크 정의에 새 이미지 주입
       - name: Fill in the new image ID in the Amazon ECS task definition
