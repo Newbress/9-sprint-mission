@@ -55,6 +55,13 @@ jobs:
           docker push $REPOSITORY:$IMAGE_TAG
           docker push $REPOSITORY:latest
 
+      - name: Switch AWS credentials to ECS region
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
       # 6. 현재 동작 중인 최신 ECS 태스크 정의 다운로드
       - name: Download current ECS task definition
         run: |
