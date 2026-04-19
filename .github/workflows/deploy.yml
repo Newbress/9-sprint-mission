@@ -73,7 +73,7 @@ jobs:
           container-name: discodeit-app
           image: ${{ vars.ECR_REPOSITORY_URI }}:${{ github.sha }}
 
-      - name: Stop current service (Scale down to 0)
+      - name: Stop current service (Scale down to 1)
         run: |
           aws ecs update-service \
             --cluster ${{ vars.ECS_CLUSTER }} \
