@@ -25,7 +25,7 @@ spring:
 
 logging:
   level:
-    org.hibernate.SQL: info
+    org.hibernate.SQL: trace
 
 info:
   app:
