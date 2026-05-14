@@ -19,6 +19,7 @@ import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class BasicChannelService implements ChannelService {
 
   @Transactional
   @Override
+  @PreAuthorize("hasRole('CHANNEL_MANAGER')")
   public ChannelDto create(PublicChannelCreateRequest request) {
     log.debug("Public 채널 생성 시작: {}", request);
     String name = request.name();
@@ -48,6 +50,7 @@ public class BasicChannelService implements ChannelService {
 
   @Transactional
   @Override
+  @PreAuthorize("hasRole('CHANNEL_MANAGER')")
   public ChannelDto create(PrivateChannelCreateRequest request) {
     log.debug("Private 채널 생성 시작: {}", request);
     Channel channel = new Channel(ChannelType.PRIVATE, null, null);
@@ -70,7 +73,7 @@ public class BasicChannelService implements ChannelService {
         .map(channelMapper::toDto)
         .orElseThrow(
             () -> new ChannelNotFoundException(ErrorCode.CHANNEL_NOT_FOUND, Map.of("attemptedChannelId", channelId)));
-    log.info("채널 조회 완료: id={]", channelId);
+    log.info("채널 조회 완료: id={}", channelId);
     return channelDto;
   }
 
@@ -96,6 +99,7 @@ public class BasicChannelService implements ChannelService {
 
   @Transactional
   @Override
+  @PreAuthorize("hasRole('CHANNEL_MANAGER')")
   public ChannelDto update(UUID channelId, PublicChannelUpdateRequest request) {
     log.debug("채널 수정 시작: id={}, request={}", channelId, request);
     String newName = request.newName();
@@ -113,6 +117,7 @@ public class BasicChannelService implements ChannelService {
 
   @Transactional
   @Override
+  @PreAuthorize("hasRole('CHANNEL_MANAGER')")
   public void delete(UUID channelId) {
     log.debug("채널 삭제 시작: id={}", channelId);
     Channel channel = channelRepository.findById(channelId)

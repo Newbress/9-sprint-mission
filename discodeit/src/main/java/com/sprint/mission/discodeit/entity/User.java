@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @Entity
 @Table(name = "users")
@@ -44,6 +45,7 @@ public class User extends BaseUpdatableEntity {
   @Column(nullable = false)
   private Role role = Role.USER;  // 기본값 USER
 
+  @PreAuthorize("hasRole('ADMIN')")
   public void updateRole(Role role) {
     this.role = role;
   }
