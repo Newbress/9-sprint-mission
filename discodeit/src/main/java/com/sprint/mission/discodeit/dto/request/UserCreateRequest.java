@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 @Schema(description = "User 생성 정보")
 public record UserCreateRequest(
     @NotNull
-    @Size(min = 6, max = 20)
+    @Size(min = 4, max = 20)
     String username,
     @NotNull
     @Email
