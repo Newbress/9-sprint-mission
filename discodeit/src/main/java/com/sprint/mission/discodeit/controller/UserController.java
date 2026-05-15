@@ -1,13 +1,10 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.data.UserDto;
-import com.sprint.mission.discodeit.dto.data.UserStatusDto;
 import com.sprint.mission.discodeit.dto.request.BinaryContentCreateRequest;
 import com.sprint.mission.discodeit.dto.request.UserCreateRequest;
-import com.sprint.mission.discodeit.dto.request.UserStatusUpdateRequest;
 import com.sprint.mission.discodeit.dto.request.UserUpdateRequest;
 import com.sprint.mission.discodeit.service.UserService;
-import com.sprint.mission.discodeit.service.UserStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +31,6 @@ import java.util.UUID;
 public class UserController {
 
   private final UserService userService;
-  private final UserStatusService userStatusService;
 
   @Operation(summary = "")
   @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -88,18 +84,6 @@ public class UserController {
     return ResponseEntity
         .status(HttpStatus.OK)
         .body(users);
-  }
-
-  @Operation(summary = "")
-  @PatchMapping(path = "{userId}/userStatus")
-  public ResponseEntity<UserStatusDto> updateUserStatusByUserId(
-      @Parameter(description = "상태를 변경할 User ID")
-      @PathVariable("userId") UUID userId,
-      @Valid @RequestBody UserStatusUpdateRequest request) {
-    UserStatusDto updatedUserStatus = userStatusService.updateByUserId(userId, request);
-    return ResponseEntity
-        .status(HttpStatus.OK)
-        .body(updatedUserStatus);
   }
 
   private Optional<BinaryContentCreateRequest> resolveProfileRequest(MultipartFile profileFile) {

@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sprint.mission.discodeit.service.UserService;
-import com.sprint.mission.discodeit.service.UserStatusService;
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +29,6 @@ class UserControllerTest {
   @Autowired private ObjectMapper objectMapper;
 
   @MockitoBean private UserService userService;
-  @MockitoBean private UserStatusService userStatusService;
 
   @Test
   @DisplayName("유저 생성 성공 (HTTP 201 반환)")
@@ -92,18 +90,5 @@ class UserControllerTest {
     mockMvc.perform(delete("/api/users/{userId}", userId))
         .andDo(print())
         .andExpect(status().isNoContent());
-  }
-
-  @Test
-  @DisplayName("유저 상태 변경 실패 - 잘못된 JSON 바디 (HTTP 400 반환)")
-  void updateUserStatusByUserId_Fail_InvalidBody() throws Exception {
-    UUID userId = UUID.randomUUID();
-    String invalidJson = "{}";
-
-    mockMvc.perform(patch("/api/users/{userId}/userStatus", userId)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(invalidJson))
-        .andDo(print())
-        .andExpect(status().isBadRequest());
   }
 }

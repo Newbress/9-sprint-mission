@@ -14,7 +14,6 @@ import com.sprint.mission.discodeit.exception.user.UserAlreadyExistsException;
 import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
-import com.sprint.mission.discodeit.repository.UserStatusRepository; // 이거 필요할 겁니다!
 import com.sprint.mission.discodeit.service.basic.BasicUserService;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,9 +32,6 @@ class BasicUserServiceTest {
 
   @Mock
   private UserMapper userMapper;
-
-  @Mock
-  private UserStatusRepository userStatusRepository;
 
   @InjectMocks
   private BasicUserService basicUserService;

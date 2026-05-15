@@ -14,8 +14,6 @@ public enum ErrorCode {
   MESSAGE_NOT_FOUND("해당 메세지를 찾을 수 없습니다."),
   MESSAGE_CONTENT_INVALID("메시지 내용이 올바르지 않습니다."),
   READ_STATUS_NOT_FOUND("해당 ReadStatus를 찾을 수 없습니다."),
-  USER_STATUS_NOT_FOUND("해당 UserStatus를 찾을 수 없습니다."),
-  USER_STATUS_INVALID("UserStatus 값이 올바르지 않습니다."),
   BINARY_CONTENT_NOT_FOUND("해당 파일 데이터를 찾을 수 없습니다."),
   BINARY_CONTENT_TYPE_INVALID("파일 형식이 올바르지 않습니다.");
 
