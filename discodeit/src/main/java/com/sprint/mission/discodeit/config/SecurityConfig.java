@@ -77,6 +77,10 @@ public class SecurityConfig {
             .successHandler(loginSuccessHandler)
             .failureHandler(loginFailureHandler)
         )
+        .rememberMe(remember -> remember
+            .key("discodeit-remember-me")
+            .tokenValiditySeconds(60 * 60 * 24 * 14)  // 쿠키 유효기간 14일
+        )
         .logout(logout -> logout
             .logoutUrl("/api/auth/logout")
             .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT))
