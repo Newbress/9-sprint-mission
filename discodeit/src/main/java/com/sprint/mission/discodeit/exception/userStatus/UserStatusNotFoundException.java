@@ -13,4 +13,5 @@ public class UserStatusNotFoundException extends UserStatusException{
   public UserStatusNotFoundException() {
     super(ErrorCode.USER_STATUS_NOT_FOUND);
   }
+
 }
