@@ -13,6 +13,7 @@ import com.sprint.mission.discodeit.exception.user.UserNotFoundException;
 import com.sprint.mission.discodeit.mapper.UserMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
+import com.sprint.mission.discodeit.security.JWT.JwtRegistry;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class BasicUserService implements UserService {
   private final BinaryContentRepository binaryContentRepository;
   private final BinaryContentStorage binaryContentStorage;
   private final PasswordEncoder passwordEncoder;
-  private final BasicAuthService basicAuthService;
+  private final JwtRegistry jwtRegistry;
 
   @Transactional
   @Override
@@ -168,7 +169,7 @@ public class BasicUserService implements UserService {
         .orElseThrow(UserNotFoundException::new);
     user.updateRole(newRole);
 
-    basicAuthService.expireUserSessions(user.getUsername());
+    jwtRegistry.invalidateJwtInformationByUserId(userId);
 
     return userMapper.toDto(user);
   }

@@ -1,4 +1,4 @@
-package com.sprint.mission.discodeit.security;
+package com.sprint.mission.discodeit.security.JWT;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.*;
@@ -77,6 +77,17 @@ public class JwtTokenProvider {
   public String getUsername(String token) {
     try {
       return SignedJWT.parse(token).getJWTClaimsSet().getSubject();
+    } catch (Exception e) {
+      throw new RuntimeException("JWT 파싱 실패", e);
+    }
+  }
+
+  public UUID getUserId(String token) {
+    try {
+      String userId = SignedJWT.parse(token)
+          .getJWTClaimsSet()
+          .getStringClaim("userId");
+      return UUID.fromString(userId);
     } catch (Exception e) {
       throw new RuntimeException("JWT 파싱 실패", e);
     }

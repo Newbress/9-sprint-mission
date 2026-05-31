@@ -1,7 +1,8 @@
 package com.sprint.mission.discodeit.config;
 
-import com.sprint.mission.discodeit.security.JwtAuthenticationFilter;
-import com.sprint.mission.discodeit.security.JwtLoginSuccessHandler;
+import com.sprint.mission.discodeit.security.JWT.JwtAuthenticationFilter;
+import com.sprint.mission.discodeit.security.JWT.JwtLoginSuccessHandler;
+import com.sprint.mission.discodeit.security.JWT.JwtLogoutHandler;
 import com.sprint.mission.discodeit.security.LoginFailureHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class SecurityConfig {
   private final LoginFailureHandler loginFailureHandler;
   private final JwtLoginSuccessHandler jwtLoginSuccessHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final JwtLogoutHandler jwtLogoutHandler;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -68,6 +70,7 @@ public class SecurityConfig {
         )
         .logout(logout -> logout
             .logoutUrl("/api/auth/logout")
+            .addLogoutHandler(jwtLogoutHandler)
             .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT))
         )
         .exceptionHandling(exception -> exception
