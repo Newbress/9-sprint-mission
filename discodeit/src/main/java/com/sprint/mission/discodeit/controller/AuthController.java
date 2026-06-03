@@ -1,58 +1,106 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.dto.data.JwtDto;
 import com.sprint.mission.discodeit.dto.data.UserDto;
-import com.sprint.mission.discodeit.dto.request.LoginRequest;
-import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.service.AuthService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.sprint.mission.discodeit.dto.request.UserRoleUpdateRequest;
+import com.sprint.mission.discodeit.exception.ErrorResponse;
+import com.sprint.mission.discodeit.security.DiscodeitUserDetails;
+import com.sprint.mission.discodeit.security.JWT.JwtInformation;
+import com.sprint.mission.discodeit.security.JWT.JwtRegistry;
+import com.sprint.mission.discodeit.security.JWT.JwtTokenProvider;
+import com.sprint.mission.discodeit.service.basic.BasicUserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Slf4j
 @Tag(name = "Auth",
-    description = "인증 api")
+    description = "인증 API")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-  private final AuthService authService;
+  private final BasicUserService basicUserService;
+  private final JwtTokenProvider jwtTokenProvider;
+  private final UserDetailsService userDetailsService;
+  private final JwtRegistry jwtRegistry;
 
-  @Operation(summary = "로그인", operationId = "login", responses = {
-      @ApiResponse(
-          responseCode = "200",
-          description = "로그인 성공"
-      ),
-      @ApiResponse(
-          responseCode = "400",
-          description = "비밀번호가 일치하지 않음",
-          content = @Content(
-              examples = @ExampleObject(value = "Wrong password")
-          )
-      ),
-      @ApiResponse(
-          responseCode = "404",
-          description = "사용자를 찾을 수 없음",
-          content = @Content(
-              examples = @ExampleObject(value = "User with username {username} not found")
-          )
-      )
-  })
-  @PostMapping("/login")
-  public ResponseEntity<UserDto> login(@RequestBody LoginRequest loginRequest) {
-    UserDto user = authService.login(loginRequest);
+  @GetMapping("/csrf-token")
+  public ResponseEntity<Void> getCsrfToken(CsrfToken csrfToken) {
+    String tokenValue = csrfToken.getToken();
+    log.debug("CSRF 토큰 요청: {}", tokenValue);
+    return ResponseEntity.status(203).build();
+  }
+
+  @GetMapping("/me")
+  public ResponseEntity<UserDto> me(
+      @AuthenticationPrincipal DiscodeitUserDetails userDetails) {
     return ResponseEntity
         .status(HttpStatus.OK)
-        .body(user);
+        .body(userDetails.getUserDto());
+  }
+
+  @PutMapping("/role")
+  public ResponseEntity<UserDto> updateRole(
+      @RequestBody UserRoleUpdateRequest request) {
+    UserDto updatedUser = basicUserService.updateRole(request.userId(), request.newRole());
+    return ResponseEntity.ok(updatedUser);
+  }
+
+  @PostMapping("/refresh")
+  public ResponseEntity<?> refresh(
+      @CookieValue(value = "REFRESH_TOKEN", required = false) String refreshToken,
+      HttpServletResponse response) {
+
+    if (refreshToken == null
+        || !jwtTokenProvider.validateToken(refreshToken)
+        || !jwtRegistry.hasActiveJwtInformationByRefreshToken(refreshToken)) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+          .body(new ErrorResponse(
+              Instant.now(),
+              "INVALID_REFRESH_TOKEN",
+              "리프레시 토큰이 유효하지 않습니다.",
+              null,
+              "InvalidRefreshTokenException",
+              401
+          ));
+    }
+
+    String username = jwtTokenProvider.getUsername(refreshToken);
+    DiscodeitUserDetails userDetails =
+        (DiscodeitUserDetails) userDetailsService.loadUserByUsername(username);
+    UUID userId = userDetails.getUserDto().id();
+
+    String newAccessToken = jwtTokenProvider.generateAccessToken(username, userId);
+    String newRefreshToken = jwtTokenProvider.generateRefreshToken(username, userId);
+
+    jwtRegistry.rotateJwtInformation(refreshToken,
+        new JwtInformation(userId, newAccessToken, newRefreshToken));
+
+    Cookie refreshCookie = new Cookie("REFRESH_TOKEN", newRefreshToken);
+    refreshCookie.setHttpOnly(true);
+    refreshCookie.setPath("/");
+    refreshCookie.setMaxAge(7 * 24 * 60 * 60);
+    response.addCookie(refreshCookie);
+
+    return ResponseEntity.ok(new JwtDto(userDetails.getUserDto(), newAccessToken));
   }
 }

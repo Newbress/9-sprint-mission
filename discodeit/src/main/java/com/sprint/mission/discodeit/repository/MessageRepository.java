@@ -13,10 +13,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface MessageRepository extends JpaRepository<Message,UUID> {
 
-  Message save(Message message);
-
-  Optional<Message> findById(UUID id);
-
   @Query("SELECT m FROM Message m "
       + "WHERE m.channel.id = :channelId"
       + " AND m.createdAt < :cursor"
@@ -24,10 +20,6 @@ public interface MessageRepository extends JpaRepository<Message,UUID> {
   Page<Message> findAllByChannelId(@Param("channelId") UUID channelId, @Param("cursor")Instant cursor ,Pageable pageable);
 
   Optional<Message> findTopByChannelIdOrderByCreatedAtDesc(UUID channelId);
-
-  boolean existsById(UUID id);
-
-  void deleteById(UUID id);
 
   void deleteAllByChannelId(UUID channelId);
 }
