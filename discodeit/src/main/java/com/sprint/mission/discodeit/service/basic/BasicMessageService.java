@@ -10,6 +10,7 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.event.BinaryContentCreatedEvent;
+import com.sprint.mission.discodeit.event.MessageCreatedEvent;
 import com.sprint.mission.discodeit.mapper.MessageMapper;
 import com.sprint.mission.discodeit.mapper.PageResponseMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
@@ -81,6 +82,7 @@ public class BasicMessageService implements MessageService {
         attachments
     );
     messageRepository.save(message);
+    applicationEventPublisher.publishEvent(new MessageCreatedEvent(message));
     log.info("메세지를 생성했습니다.");
     return messageMapper.toDto(message);
   }
