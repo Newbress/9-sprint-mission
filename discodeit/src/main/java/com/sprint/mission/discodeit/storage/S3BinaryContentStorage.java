@@ -24,7 +24,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 
 @Component
 @ConditionalOnProperty(name = "discodeit.storage.type", havingValue = "s3")
-public class S3BinaryContentStorage implements BinaryContentStorage{
+public class  S3BinaryContentStorage implements BinaryContentStorage{
 
   private final String accessKey;
   private final String secretKey;
@@ -61,6 +61,13 @@ public class S3BinaryContentStorage implements BinaryContentStorage{
 
   @Override
   public UUID put(UUID id, byte[] data) {
+    try {
+      Thread.sleep(3000);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new RuntimeException("Thread interrupted while simulating delay", e);
+    }
+
     PutObjectRequest request = PutObjectRequest.builder()
         .bucket(this.bucket)
         .key(id.toString())
