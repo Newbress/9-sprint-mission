@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.storage;
 import com.sprint.mission.discodeit.dto.data.BinaryContentDto;
 import com.sprint.mission.discodeit.entity.Notification;
 import com.sprint.mission.discodeit.entity.Role;
+import com.sprint.mission.discodeit.event.S3UploadFailedEvent;
 import com.sprint.mission.discodeit.repository.NotificationRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import java.io.InputStream;
@@ -11,8 +12,10 @@ import java.time.Duration;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,18 +48,22 @@ public class  S3BinaryContentStorage implements BinaryContentStorage{
   private final NotificationRepository notificationRepository;
   private final UserRepository userRepository;
 
+  @Autowired
+  private final ApplicationEventPublisher eventPublisher;
+
   public S3BinaryContentStorage(
       @Value("${discodeit.storage.s3.access-key}") String accessKey,
       @Value("${discodeit.storage.s3.secret-key}") String secretKey,
       @Value("${discodeit.storage.s3.region}") String region,
       @Value("${discodeit.storage.s3.bucket}") String bucket,
-      NotificationRepository notificationRepository, UserRepository userRepository) {
+      NotificationRepository notificationRepository, UserRepository userRepository, ApplicationEventPublisher eventPublisher) {
     this.accessKey = accessKey;
     this.secretKey = secretKey;
     this.region = region;
     this.bucket = bucket;
     this.notificationRepository = notificationRepository;
     this.userRepository = userRepository;
+    this.eventPublisher = eventPublisher;
 
     AwsBasicCredentials credentials = AwsBasicCredentials.create(this.accessKey, this.secretKey);
     Region awsRegion = Region.of(this.region);
@@ -98,21 +105,11 @@ public class  S3BinaryContentStorage implements BinaryContentStorage{
   @Recover
   public UUID recover(Exception e, UUID id, byte[] data) {
     String requestId = MDC.get("requestId");
-
     log.error("바이너리 데이터 저장 최종 실패 - RequestId: {}, BinaryContentId: {}, Error: {}",
         requestId, id, e.getMessage());
-
-    userRepository.findAll().stream()
-        .filter(user -> user.getRole() == Role.ADMIN)
-        .forEach(admin -> {
-          String title = "파일 업로드 실패";
-          String content = String.format(
-              "RequestId: %s\nBinaryContentId: %s\nError: %s",
-              requestId, id, e.getMessage()
-          );
-          notificationRepository.save(new Notification(admin, title, content));
-        });
-
+    eventPublisher.publishEvent(
+        new S3UploadFailedEvent(id, e.getMessage(), requestId)
+    );
     return id;
   }
 
