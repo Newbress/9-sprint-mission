@@ -7,7 +7,7 @@ plugins {
 
 group = 'com.sprint.mission'
 version = '0.0.1-SNAPSHOT'
-version = '2.1-M10'
+version = '2.2-M11'
 
 java {
     toolchain {
@@ -52,6 +52,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     implementation 'com.nimbusds:nimbus-jose-jwt:10.3'
+
+    implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 tasks.named('test') {
