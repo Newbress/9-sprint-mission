@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-
+@Component
 @RequiredArgsConstructor
 public class NotificationRequiredEventListener {
 
@@ -49,14 +49,11 @@ public class NotificationRequiredEventListener {
         .filter(rs -> rs.isNotificationEnabled())
         .filter(rs -> !rs.getUser().getId().equals(author.getId()))
         .forEach(rs -> {
+          // 알림 생성
           Notification notification = new Notification(rs.getUser(), title, content);
           notificationRepository.save(notification);
-        });
 
-    readStatusRepository.findAllByChannelId(channel.getId()).stream()
-        .filter(rs -> rs.isNotificationEnabled())
-        .filter(rs -> !rs.getUser().getId().equals(author.getId()))
-        .forEach(rs -> {
+          // 캐시 무효화
           Cache cache = cacheManager.getCache("userNotifications");
           if (cache != null) {
             cache.evict(rs.getUser().getId());
@@ -76,6 +73,11 @@ public class NotificationRequiredEventListener {
 
     Notification notification = new Notification(user, title, content);
     notificationRepository.save(notification);
+
+    Cache cache = cacheManager.getCache("userNotifications");
+    if (cache != null) {
+      cache.evict(event.getUserId());
+    }
   }
 
   @Transactional
